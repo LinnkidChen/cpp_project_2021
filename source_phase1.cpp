@@ -144,9 +144,9 @@ void login_signin();
 int main() {
   init_load_file();
   login_signin();
-
+  string input;
   while (true) {
-    cin
+    cin >> input;
   }
   return 0;
 }
