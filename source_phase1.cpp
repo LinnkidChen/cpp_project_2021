@@ -2,7 +2,10 @@
 #include <iostream>
 /*-------------------------------------------------------*/
 
+using std::cin;
+using std::cout;
 using std::string;
+using std::vector;
 /*-----------------------------------------------------*/
 
 #define SELLER 1
@@ -14,6 +17,7 @@ using std::string;
 
 #define CART_SIZE 20
 #define MAX_PRODUCT 50 // max product count for each seller
+/*-----------------------------------------------------*/
 class account {
 public:
   account(string name_ = NULL, string password_ = NULL, float balance_ = 0)
@@ -139,6 +143,10 @@ private:
   int type;
 };
 /*-------------------------------------------------------*/
+vector<struct seller> all_seller;
+vector<struct consumer> all_consumer;
+
+/*-----------------------------------------------------*/
 void init_load_file(); // load in user and product
 void login_signin();
 int main() {
