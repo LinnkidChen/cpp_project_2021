@@ -1,11 +1,18 @@
+/* notes
+1. 全部函数，变量用类封装 不要使用全局变量
+*/
+
 #include <cstring>
+#include <fstream>
 #include <iostream>
+#include <iterator>
+#include <map>
 /*-------------------------------------------------------*/
 
 using std::cin;
 using std::cout;
+using std::map;
 using std::string;
-using std::vector;
 /*-----------------------------------------------------*/
 
 #define SELLER 1
@@ -17,12 +24,14 @@ using std::vector;
 
 #define CART_SIZE 20
 #define MAX_PRODUCT 50 // max product count for each seller
+
+#define HASH_MOD 200
 /*-----------------------------------------------------*/
 class account {
 public:
   account(string name_ = NULL, string password_ = NULL, float balance_ = 0)
       : name(name_), password(password_), balance(balance_){};
-  virtual ~account();
+  // virtual ~account();
 
   virtual int GetBalence() { return this->balance; };
   virtual bool SubBalance(float withdraw) {
@@ -62,13 +71,15 @@ private:
   string password;
   float balance;
 };
-
+/*
+    account format in file: type_code name password balance
+*/
 class seller : public account {
 public:
   seller(string name_ = NULL, string password_ = NULL, float balance_ = 0)
       : account(name_, password_, balance_){};
   int GetUserType() { return SELLER; }
-  product *_product; // pointer to product
+  class product *_product; // pointer to product
 };
 
 class consumer : public account {
@@ -143,8 +154,8 @@ private:
   int type;
 };
 /*-------------------------------------------------------*/
-vector<struct seller> all_seller;
-vector<struct consumer> all_consumer;
+map<unsigned int, struct seller> all_seller;
+map<unsigned int, struct consumer> all_consumer;
 
 /*-----------------------------------------------------*/
 void init_load_file(); // load in user and product
@@ -157,4 +168,26 @@ int main() {
     cin >> input;
   }
   return 0;
+}
+
+void init_load_file() {
+  // loading accounts;
+  std::ifstream fin;
+  string name, password;
+  float balance;
+  int type;
+  fin.open("account.txt");
+  if (!fin.is_open())
+    cout << "FAIL TO OPEN account.txt" << std::endl;
+  else {
+    fin >> type >> name >> password >> balance;
+    switch (type) {
+    case SELLER:
+      all_seller.
+
+          break;
+    case CONSUMER:
+      break;
+    }
+  }
 }
