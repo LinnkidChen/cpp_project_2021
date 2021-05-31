@@ -6,13 +6,14 @@
 #include <fstream>
 #include <iostream>
 #include <iterator>
-#include <map>
+#include <vector>
 /*-------------------------------------------------------*/
 
 using std::cin;
 using std::cout;
-using std::map;
+using std::endl;
 using std::string;
+using std::vector;
 /*-----------------------------------------------------*/
 
 #define SELLER 1
@@ -153,41 +154,73 @@ public:
 private:
   int type;
 };
+class Platform {
+public:
+  void init_load_file(); // load in user and product
+  void login_signin();
+  void print_all(int type); // print all_seller or all_counsumer
+
+private:
+  vector<struct seller> all_seller;
+  vector<struct consumer> all_consumer;
+};
 /*-------------------------------------------------------*/
-map<unsigned int, struct seller> all_seller;
-map<unsigned int, struct consumer> all_consumer;
 
 /*-----------------------------------------------------*/
-void init_load_file(); // load in user and product
-void login_signin();
+
 int main() {
-  init_load_file();
-  login_signin();
-  string input;
-  while (true) {
-    cin >> input;
-  }
+  Platform platform;
+  platform.init_load_file();
+  //   platform.login_signin();
+  //   string input;
+  //   while (true) {
+  //     cin >> input;
+  //   }
   return 0;
 }
 
-void init_load_file() {
+void Platform::init_load_file() {
   // loading accounts;
   std::ifstream fin;
   string name, password;
   float balance;
   int type;
+
   fin.open("account.txt");
   if (!fin.is_open())
     cout << "FAIL TO OPEN account.txt" << std::endl;
   else {
-    fin >> type >> name >> password >> balance;
-    switch (type) {
-    case SELLER:
-      all_seller.
+    while (!fin.eof()) {
+      fin >> type >> name >> password >> balance;
+      if (type == SELLER) {
+        seller sler(name, password, balance);
+        all_seller.push_back(sler);
 
-          break;
-    case CONSUMER:
-      break;
+      } else {
+        consumer csmr(name, password, balance);
+        all_consumer.push_back(csmr);
+      }
     }
+  }
+  print_all(SELLER);
+  print_all(CONSUMER);
+}
+void Platform ::print_all(int type) {
+  switch (type) {
+  case SELLER:
+    cout << "----------PRINTING ALL SELLER------------" << endl;
+    for (int i = 0; i < all_seller.size(); i++) {
+      cout << all_seller[i].GetName() << all_seller[i].GetBalence() << endl;
+    }
+    cout << "--------------END OF PRINTING---------------" << endl;
+    break;
+
+  case CONSUMER:
+    cout << "----------PRINTING ALL CONSUMER------------" << endl;
+    for (int i = 0; i < all_consumer.size(); i++) {
+      cout << all_consumer[i].GetName() << all_consumer[i].GetBalence() << endl;
+    }
+    cout << "--------------END OF PRINTING---------------" << endl;
+    break;
   }
 }
