@@ -1,0 +1,14 @@
+1 seller mima 30.5 1
+2 consumer mimia 20.35 2
+1 sell45er mima 30.5 3
+2 co6nsumer mimia 20.35 4
+1 sell5er mima 30.5 5
+2 c4onsumer mimia 20.35 6
+1 sellesr mima 30.5  7
+2 consumer mimia 20.35 8
+1 sell35er mima 30.5   9
+2 consurmer mimia 20.35 11
+1 sel4ler mima 30.5 12
+2 consumet43r mimia 20.35 14
+1 se56ller mima 30.5 15
+2 consu2mer mimia 20.35 16
