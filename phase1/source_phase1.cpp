@@ -185,6 +185,7 @@ public:
   void print_all_pdt(int type); // print all_product in type
   void print_all_act(int type); // print all_seller or all_counsumer
   void show_option();
+  void write_back_file();
 
 private:
   vector<seller> all_seller;

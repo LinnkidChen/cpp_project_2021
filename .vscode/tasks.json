@@ -6,9 +6,9 @@
             "command": "/usr/bin/g++",
             "args": [
                 "-g",
-                "${workspaceFolder}/source_phase1.cpp",
+                "${workspaceFolder}/phase1/source_phase1.cpp",
                 "-o",
-                "${workspaceFolder}/source_phase1"
+                "${workspaceFolder}/phase1/source_phase1"
             ],
             "options": {
                 "cwd": "${fileDirname}"
