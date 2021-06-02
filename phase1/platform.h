@@ -1,3 +1,6 @@
+#ifndef PLATFORM_H
+#define PLATFORM_H 1
+#include "definition.h"
 void Platform::init_load_file() {
   // loading accounts;
   std::ifstream fin;
@@ -159,3 +162,5 @@ void Platform ::print_all_pdt(int type) {
     break;
   }
 }
+
+#endif

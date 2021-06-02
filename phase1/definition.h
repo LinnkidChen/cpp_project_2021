@@ -3,10 +3,10 @@
 #include <cstring>
 #include <fstream>
 #include <iostream>
+
 #include <iterator>
 #include <vector>
 
-#include "platform.h"
 /*-------------------------------------------------------*/
 
 using std::cin;
