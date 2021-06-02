@@ -1,10 +1,11 @@
 #ifndef DEFINITION_H
 #define DEFINITION_H 2
+
 #include <cstring>
 #include <fstream>
 #include <iostream>
-
 #include <iterator>
+#include <sstream> //convert num in string to int
 #include <vector>
 
 /*-------------------------------------------------------*/
@@ -15,6 +16,7 @@ using std::endl;
 using std::setfill;
 using std::setw;
 using std::string;
+using std::stringstream;
 using std::vector;
 /*-----------------------------------------------------*/
 
@@ -26,8 +28,9 @@ using std::vector;
 #define BOOK 13
 
 #define CART_SIZE 20
-//#define MAX_PRODUCT 50 // max product count for each seller
-
+#define MAX_PRODUCT 100 // max product count for each seller
+#define MAX_SELLER_COUNT 200
+#define MAX_CONSUMER_COUNT 2000
 #define FORMAT_NAME_WID 25
 #define FORMAT_PRICE_WID 12
 #define FORMAT_BAR_FRONT 40
@@ -202,6 +205,11 @@ public:
   void print_all_act(int type); // print all_seller or all_counsumer
   int Get_option();
   void write_back_file();
+  void process_choice(int choice);
+  void search_product();
+  void create_new_act();
+  unsigned int genrate_account_id(int type);
+  void login();
 
 private:
   vector<seller> all_seller;

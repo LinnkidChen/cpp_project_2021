@@ -15,7 +15,7 @@ void Platform::init_load_file() {
   if (!fin.is_open())
     cout << "FAIL TO OPEN account.txt" << std::endl;
   else {
-    while (fin.peek() != EOF) {
+    while (!fin.eof()) {
       fin >> type >> name >> password >> balance >> id;
       print_all_act(SELLER);
       print_all_act(CONSUMER);
@@ -27,6 +27,7 @@ void Platform::init_load_file() {
         consumer csmr(name, password, balance, id);
         all_consumer.push_back(csmr);
       }
+      type = -1;
     }
   }
   fin.close();
@@ -74,6 +75,7 @@ void Platform::init_load_file() {
         }
         all_book.push_back(bok);
       }
+      type = -1;
     }
   }
   print_all_act(SELLER);
@@ -211,7 +213,7 @@ void Platform::write_back_file() {
            << endl;
   }
   fout.close();
-  fout.open("test.txt");
+  fout.open("product.txt");
   if (!fout.is_open()) {
     cout << "unable to open product.txt";
   } else {
@@ -253,7 +255,7 @@ void Platform::write_back_file() {
 int Platform::Get_option() {
   int i = 1;
   int choice;
-  account_type = SELLER;
+
   cout << i << ". show all product" << endl; // 1
   i++;
   cout << i << ". search product " << endl; // 2
@@ -289,8 +291,8 @@ int Platform::Get_option() {
   cout << "\n"
        << "Please enter your choice number" << endl;
   if (cin.peek() == 'q') {
-    cout << "exiting program\n";
-    exit(1);
+
+    return -1;
   }
   cin >> choice;
 
@@ -309,5 +311,189 @@ int Platform::Get_option() {
     return choice;
 
   return -1;
+}
+
+/*
+    1. show all product   --all
+    2. search product  --all
+    3. sign in         -- -1
+    4. log in           -- -1
+    5. change password               --seller / consmer
+    6. show balance  --seller/con
+    7.  log out    --seller/con
+    8.top up           ---con
+    9.buy product          --con
+    10.add product--seller
+    11. delete product -->changd descrip/ change stock/ change price
+    12.  edit product--seller
+
+*/
+void Platform ::process_choice(int choice) {
+  switch (choice) {
+  case 1: // show all product
+    print_all_pdt(CLOTH);
+    print_all_pdt(FOOD);
+    print_all_pdt(BOOK);
+    break;
+  case 2:
+    search_product();
+    break;
+  case 3:
+    create_new_act();
+    break;
+  case 4:
+    login();
+  }
+}
+
+void Platform::search_product() {
+  cout << "Please enter the info you want to search" << endl;
+  string input;
+  unsigned int id, flag;
+  cin >> input;
+  stringstream degree(input);
+  degree >> id;
+  flag = 0;
+
+  if (!input.compare("FOOD")) // print all products under one catagory
+    print_all_pdt(FOOD);
+  else if (!input.compare("CLOTH"))
+    print_all_pdt(CLOTH);
+  else if (!input.compare("BOOK"))
+    print_all_pdt(BOOK);
+  else {
+    for (int i = 0; i < all_book.size(); i++) {
+      if (all_book[i].GetDscrip().find(input) != string::npos ||
+          all_book[i].GetId() == id) { // found a match
+        flag++;
+        cout << setw(FORMAT_NAME_WID) << all_book[i].GetDscrip()
+             << setw(FORMAT_PRICE_WID) << all_book[i].GetPrice()
+             << setw(FORMAT_PRICE_WID) << all_book[i].GetId()
+             << setw(FORMAT_PRICE_WID) << all_book[i].GetSellerId() << endl;
+      }
+    }
+    for (int i = 0; i < all_cloth.size(); i++) {
+      if (all_cloth[i].GetDscrip().find(input) != string::npos ||
+          all_cloth[i].GetId() == id) { // found a match
+        flag++;
+        cout << setw(FORMAT_NAME_WID) << all_cloth[i].GetDscrip()
+             << setw(FORMAT_PRICE_WID) << all_cloth[i].GetPrice()
+             << setw(FORMAT_PRICE_WID) << all_cloth[i].GetId()
+             << setw(FORMAT_PRICE_WID) << all_cloth[i].GetSellerId() << endl;
+      }
+    }
+    for (int i = 0; i < all_food.size(); i++) {
+
+      if (all_food[i].GetDscrip().find(input) != string::npos ||
+          all_food[i].GetId() == id) { // found a match
+        flag++;
+        cout << setw(FORMAT_NAME_WID) << all_food[i].GetDscrip()
+             << setw(FORMAT_PRICE_WID) << all_food[i].GetPrice()
+             << setw(FORMAT_PRICE_WID) << all_food[i].GetId()
+             << setw(FORMAT_PRICE_WID) << all_food[i].GetSellerId() << endl;
+      }
+    }
+    if (!flag)
+      cout << "Cant find target product " << endl;
+  }
+}
+
+void Platform ::create_new_act() {
+  cout << "Creating new account" << endl;
+  string username, password;
+  unsigned int id;
+  int type;
+  cout << "Type.1 for seller,2 for consumer";
+  cin >> type;
+  cout << "username" << endl;
+  cin >> username;
+  cout << "password" << endl;
+  cin >> password;
+
+  id = genrate_account_id(type);
+
+  if (type == CONSUMER) {
+    for (int i = 0; i < all_consumer.size(); i++) {
+      if (username == all_consumer[i].GetName()) {
+        id = 0;
+        break;
+      }
+    }
+    if (id > 0) {
+      consumer csmr(username, password, 0, id);
+      all_consumer.push_back(csmr);
+      cout << "Create successfully!" << endl;
+    } else
+      cout << "Username alredy in use." << endl;
+  }
+  if (type == SELLER) {
+    for (int i = 0; i < all_seller.size(); i++) {
+      if (username == all_seller[i].GetName()) {
+        id = 0;
+        break;
+      }
+    }
+    if (id > 0) {
+      seller slr(username, password, 0, id);
+      all_seller.push_back(slr);
+      cout << "Create successfully!" << endl;
+    } else
+      cout << "Username alredy in use." << endl;
+  }
+}
+unsigned int Platform::genrate_account_id(int type) {
+  unsigned int id;
+  if (type == SELLER) {
+    id = all_seller.back().Getid() + 1;
+  }
+  if (type == CONSUMER) {
+    id = all_consumer.back().Getid() + 1;
+  }
+  return id;
+}
+
+void Platform::login() {
+  cout << "Log in" << endl;
+  string username, password;
+  int type, loc;
+  cout << "account type: 1 for seller,2 for consumer" << endl;
+  cin >> type;
+  cout << "username" << endl;
+  cin >> username;
+  cout << "password" << endl;
+  cin >> password;
+
+  if (type == SELLER) {
+    for (loc = 0; loc < all_seller.size(); loc++) {
+      if (all_seller[loc].GetName() == username)
+        break;
+    }
+    if (all_seller[loc].GetName() == username) {     // account found
+      if (all_seller[loc].checkPassword(password)) { // password correct
+        cur_account = &all_seller[loc];
+        account_type = SELLER;
+      } else // password incorrect
+        cout << "Incorrect password.Please try again." << endl;
+    } else {
+      // account not found
+      cout << "Account not found.please check your input" << endl;
+    }
+  }
+  if (type == CONSUMER) {
+    for (loc = 0; loc < all_consumer.size(); loc++) {
+      if (all_consumer[loc].GetName() == username)
+        break;
+    }
+    if (all_consumer[loc].GetName() == username) {     // account found
+      if (all_consumer[loc].checkPassword(password)) { // password correct
+        cur_account = &all_consumer[loc];
+        account_type = CONSUMER;
+      } else // password incorrect
+        cout << "Incorrect password.Please try again." << endl;
+    } else {
+      // account not found
+      cout << "Account not found.please check your input" << endl;
+    }
+  }
 }
 #endif

@@ -11,6 +11,8 @@ options
 2.sign in
 3.show product
 4. search product
+
+ 支持对同一品类下所有产品打折的活动
 */
 #include "definition.h"
 #include "platform.h"
@@ -35,10 +37,21 @@ options
 
 int main() {
   Platform platform;
+  int choice;
 
   platform.init_load_file();
-  cout << "\n" << platform.Get_option() << endl;
-
+  while (true) {
+    choice = platform.Get_option();
+    if (choice == -1) {
+      cout << "Exiting program." << endl;
+      break;
+    } else {
+      platform.process_choice(choice);
+    }
+    getchar();
+    getchar();
+  }
+  platform.write_back_file();
   //   string input;
   //   while (true) {
   //     cin >> input;
