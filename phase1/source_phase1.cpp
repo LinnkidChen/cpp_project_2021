@@ -13,6 +13,7 @@ options
 4. search product
 
  支持对同一品类下所有产品打折的活动
+ 已经优化，让商家知道自己每个品类第一个位置在哪。可以优化for循环中的搜索算法
 */
 #include "definition.h"
 #include "platform.h"

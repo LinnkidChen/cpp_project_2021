@@ -38,6 +38,7 @@ using std::vector;
 #define FORMAT_BAR_RARE 25
 
 /*-----------------------------------------------------*/
+
 class account {
 public:
   account(string name_ = NULL, string password_ = NULL, float balance_ = 0,
@@ -99,6 +100,7 @@ public:
       : account(name_, password_, balance_, id_){};
   int GetUserType() { return SELLER; }
   using account::operator<;
+  vector<class product>::iterator fst_book, fst_clth, fst_fod;
 };
 
 class consumer : public account {
@@ -218,6 +220,11 @@ public:
   void top_up();
   void purchase_pdt();
   void add_pdt();
+  unsigned int genrate_pdt_id(int type);
+  void del_pdt();
+  void edt_pdt();
+  void search_my_pdt(int type, unsigned int id,
+                     vector<product>::iterator &cur_pdt, seller *cur);
 
 private:
   vector<seller> all_seller;

@@ -79,11 +79,73 @@ void Platform::init_load_file() {
     }
   }
   vector<product>::iterator it;
-  //   it = find(all_food.begin(), all_food.end(), 11003);
-  //   it = all_food.end();
-  //   cout << it->GetDscrip();
-  //   print_all_act(SELLER);
-  //   print_all_act(CONSUMER);
+  std::sort(all_food.begin(), all_food.end());
+  std::sort(all_cloth.begin(), all_cloth.end());
+  std::sort(all_book.begin(), all_book.end());
+  unsigned int pdt_id;
+  unsigned int slr_id;
+  slr_id = all_seller.front().Getid();
+  int i, q;
+  q = 0;
+  i = 0;
+  while (i < all_book.size() && q < all_seller.size()) {
+    if (all_book[i].GetSellerId() == all_seller[q].Getid()) {
+      all_seller[q].fst_book = all_book.begin() + i;
+      while (all_book[i].GetSellerId() == all_seller[q].Getid()) {
+        i++;
+        if (i == all_book.size())
+          break;
+      }
+      q++;
+    }
+    if (all_book[i].GetSellerId() > all_seller[q].Getid())
+      q++;
+    if (all_book[i].GetSellerId() > all_seller[q].Getid())
+      i++;
+    if (i == all_book.size())
+      break;
+  }
+  q = 0;
+  i = 0;
+  while (i < all_cloth.size() && q < all_seller.size()) {
+    if (all_cloth[i].GetSellerId() == all_seller[q].Getid()) {
+      all_seller[q].fst_clth = all_cloth.begin() + i;
+      while (all_cloth[i].GetSellerId() == all_seller[q].Getid()) {
+        i++;
+        if (i == all_cloth.size())
+          break;
+      }
+      q++;
+    }
+    if (all_cloth[i].GetSellerId() > all_seller[q].Getid())
+      q++;
+    if (all_cloth[i].GetSellerId() > all_seller[q].Getid())
+      i++;
+    if (i == all_cloth.size())
+      break;
+  }
+  q = 0;
+  i = 0;
+  while (i < all_food.size() && q < all_seller.size()) {
+    if (all_food[i].GetSellerId() == all_seller[q].Getid()) {
+      all_seller[q].fst_fod = all_food.begin() + i;
+      while (all_food[i].GetSellerId() == all_seller[q].Getid()) {
+        i++;
+        if (i == all_food.size())
+          break;
+      }
+      q++;
+    }
+    if (all_food[i].GetSellerId() > all_seller[q].Getid())
+      q++;
+    if (all_food[i].GetSellerId() > all_seller[q].Getid())
+      i++;
+    if (i == all_food.size())
+      break;
+  }
+
+  // cout << all_seller[0].fst_book->GetDscrip() << endl;
+  print_all_act(SELLER);
   print_all_pdt(FOOD);
   print_all_pdt(CLOTH);
   print_all_pdt(BOOK);
@@ -371,6 +433,11 @@ void Platform ::process_choice(int choice) {
   case 10:
     add_pdt();
     break;
+  case 11:
+    del_pdt();
+    break;
+  case 12:
+    edt_pdt();
   }
 }
 
@@ -608,5 +675,169 @@ void Platform::add_pdt() {
   int type, stock;
   float price;
   unsigned int id, sellerid;
+  cout << "type,11 for food,12 for cloth,13 for book" << endl;
+  cin >> type;
+  cout << "description" << endl;
+  cin >> dscrip;
+  cout << "stock";
+  cin >> stock;
+  cout << "price";
+  cin >> price;
+
+  id = genrate_pdt_id(type);
+  sellerid = cur_account->Getid();
+
+  if (type == FOOD) {
+    food fod(dscrip, price, stock, id, sellerid);
+    fod.SetSellerAccount((seller *)cur_account);
+    all_food.push_back(fod);
+  }
+  if (type == CLOTH) {
+    cloth clth(dscrip, price, stock, id, sellerid);
+    clth.SetSellerAccount((seller *)cur_account);
+    all_cloth.push_back(clth);
+  }
+  if (type == BOOK) {
+    book bok(dscrip, price, stock, id, sellerid);
+    bok.SetSellerAccount((seller *)cur_account);
+    all_book.push_back(bok);
+  }
+  cout << "Add product successfully" << endl;
+}
+
+unsigned int Platform::genrate_pdt_id(int type) {
+  switch (type) {
+  case FOOD:
+    if (!all_food.empty())
+      return all_food.back().GetId() + 1;
+    else
+      return FOOD * MAX_PRODUCT;
+    break;
+  case CLOTH:
+    if (!all_cloth.empty())
+      return all_cloth.back().GetId() + 1;
+    else
+      return CLOTH * MAX_PRODUCT;
+    break;
+  case BOOK:
+    if (!all_book.empty())
+      return all_book.back().GetId();
+    else
+      return BOOK * MAX_PRODUCT;
+  }
+  return 0;
+}
+void Platform::del_pdt() {
+  cout << "delete product" << endl;
+  unsigned int id;
+  int type, deleted;
+  deleted = 0;
+  cout << "enter id" << endl;
+  cin >> id;
+  type = id / MAX_PRODUCT;
+
+  switch (type) {
+  case FOOD:
+    for (int i = 0; i < all_food.size(); i++) {
+      if (all_food[i].GetId() == id) {
+        all_food.erase(all_food.begin() + i);
+        deleted = 1;
+      }
+    }
+    break;
+  case CLOTH:
+    for (int i = 0; i < all_cloth.size(); i++) {
+      if (all_cloth[i].GetId() == id) {
+        all_cloth.erase(all_cloth.begin() + i);
+        deleted = 1;
+      }
+    }
+  case BOOK:
+    for (int i = 0; i < all_book.size(); i++) {
+      if (all_book[i].GetId() == id) {
+        all_book.erase(all_book.begin() + i);
+        deleted = 1;
+      }
+    }
+    if (deleted) {
+      cout << "delete successfully" << endl;
+
+    } else
+      cout << "target not found" << endl;
+
+  default:
+    break;
+  }
+}
+
+void Platform::edt_pdt() {
+  cout << "editing product" << endl;
+  int type, pdt_type;
+  unsigned int id;
+  string descrip;
+  vector<product>::iterator cur_pdt;
+  float price = -1;
+  int stock = -1;
+
+  cout << "enter type.1 descrip,2 price,3 stock" << endl;
+  cin >> type;
+  cout << "enter product id" << endl;
+  cin >> id;
+  pdt_type = id / MAX_PRODUCT;
+  switch (type) {
+  case 1:
+    cout << "new descrip" << endl;
+    cin >> descrip;
+    break;
+  case 2:
+    cout << "new price" << endl;
+    cin >> price;
+    break;
+  case 3:
+    cout << "new stock" << endl;
+    cin >> stock;
+    break;
+  }
+  search_my_pdt(pdt_type, id, cur_pdt, (seller *)cur_account);
+  if (price) {
+    cur_pdt->ChangePrice(price);
+  } else if (stock) {
+    cur_pdt->ChangeStock(stock);
+  } else
+    cur_pdt->ChangeDscrip(descrip);
+}
+void Platform::search_my_pdt(int type, unsigned int id,
+                             vector<product>::iterator &cur_pdt,
+                             seller *cur_account) {
+  vector<product>::iterator it;
+  switch (type) {
+
+  case FOOD:
+    for (it = cur_account->fst_fod; it->GetSellerId() == cur_account->Getid();
+         it++) {
+      if (it->GetId() == id) {
+        cur_pdt = it;
+        break;
+      }
+    }
+    break;
+
+  case BOOK:
+    for (it = cur_account->fst_book; it->GetSellerId() == cur_account->Getid();
+         it++) {
+      if (it->GetId() == id) {
+        cur_pdt = it;
+        break;
+      }
+    }
+  case CLOTH:
+    for (it = cur_account->fst_clth; it->GetSellerId() == cur_account->Getid();
+         it++) {
+      if (it->GetId() == id) {
+        cur_pdt = it;
+        break;
+      }
+    }
+  }
 }
 #endif
