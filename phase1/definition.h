@@ -26,7 +26,7 @@ using std::vector;
 #define BOOK 13
 
 #define CART_SIZE 20
-#define MAX_PRODUCT 50 // max product count for each seller
+//#define MAX_PRODUCT 50 // max product count for each seller
 
 #define FORMAT_NAME_WID 25
 #define FORMAT_PRICE_WID 12
@@ -61,7 +61,7 @@ public:
     this->name = new_name;
     return true;
   };
-
+  virtual string GetPswd() { return this->password; }
   virtual int GetUserType() = 0;
 
   virtual bool checkPassword(string input) { return input == this->password; }
@@ -73,6 +73,8 @@ public:
       return false;
   }
   virtual unsigned int Getid() { return id; }
+
+  bool operator<(const account &str) const { return (id < str.id); }
 
 private:
   string name;
@@ -90,7 +92,7 @@ public:
          unsigned int id_ = 0)
       : account(name_, password_, balance_, id_){};
   int GetUserType() { return SELLER; }
-  class product *_product; // pointer to product
+  using account::operator<;
 };
 
 class consumer : public account {
@@ -99,6 +101,7 @@ public:
            unsigned int id_ = 0)
       : account(name_, password_, balance_, id_){};
   int GetUserType() { return CONSUMER; }
+  using account::operator<;
   //   cart_product * cart
 };
 
@@ -134,10 +137,18 @@ public:
     return true;
   }
   virtual int GetStock() { return Stock; };
-
+  virtual seller *GetSellerAccount() { return seller_act; }
+  virtual void SetSellerAccount(seller *sact) { seller_act = sact; }
   virtual int GetProductType() = 0;
   virtual unsigned int GetId() { return id; };
   virtual unsigned int GetSellerId() { return seller_id; };
+
+  bool operator<(const product &str) const {
+    if (seller_id < str.seller_id)
+      return (seller_id < str.seller_id);
+    else
+      return (id < str.id);
+  }
 
 private:
   string Descrip;
@@ -146,6 +157,8 @@ private:
   int Stock;
   unsigned int seller_id;
   unsigned int id;
+
+  seller *seller_act;
 };
 
 class food : public product {
@@ -154,6 +167,7 @@ public:
        unsigned int id_ = 0, unsigned int seller_id_ = 0)
       : product(Descrip_, Price_, Stock_, id_, seller_id_), type(FOOD){};
   int GetProductType() { return type; }
+  using product::operator<;
 
 private:
   int type;
@@ -164,6 +178,7 @@ public:
         unsigned int id_ = 0, unsigned int seller_id_ = 0)
       : product(Descrip_, Price_, Stock_, id_, seller_id_), type(CLOTH){};
   int GetProductType() { return type; }
+  using product::operator<;
 
 private:
   int type;
@@ -174,6 +189,7 @@ public:
        unsigned int id_ = 0, unsigned int seller_id_ = 0)
       : product(Descrip_, Price_, Stock_, id_, seller_id_), type(BOOK){};
   int GetProductType() { return type; }
+  using product::operator<;
 
 private:
   int type;
@@ -184,13 +200,14 @@ public:
   void login_signin();
   void print_all_pdt(int type); // print all_product in type
   void print_all_act(int type); // print all_seller or all_counsumer
-  void show_option();
+  int Get_option();
   void write_back_file();
 
 private:
   vector<seller> all_seller;
   vector<consumer> all_consumer;
   account *cur_account;
+  int account_type; //-1 signed out. 1 seller  2 consumer
 
   vector<book> all_book;
   vector<cloth> all_cloth;
