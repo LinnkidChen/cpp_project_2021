@@ -40,6 +40,7 @@ int main() {
   int choice;
 
   platform.init_load_file();
+
   while (true) {
     choice = platform.Get_option();
     if (choice == -1) {

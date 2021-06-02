@@ -17,8 +17,8 @@ void Platform::init_load_file() {
   else {
     while (!fin.eof()) {
       fin >> type >> name >> password >> balance >> id;
-      print_all_act(SELLER);
-      print_all_act(CONSUMER);
+      //   print_all_act(SELLER);
+      //   print_all_act(CONSUMER);
       if (type == SELLER) {
         seller sler(name, password, balance, id);
         all_seller.push_back(sler);
@@ -78,8 +78,12 @@ void Platform::init_load_file() {
       type = -1;
     }
   }
-  print_all_act(SELLER);
-  print_all_act(CONSUMER);
+  vector<product>::iterator it;
+  //   it = find(all_food.begin(), all_food.end(), 11003);
+  //   it = all_food.end();
+  //   cout << it->GetDscrip();
+  //   print_all_act(SELLER);
+  //   print_all_act(CONSUMER);
   print_all_pdt(FOOD);
   print_all_pdt(CLOTH);
   print_all_pdt(BOOK);
@@ -326,8 +330,9 @@ int Platform::Get_option() {
     8.top up           ---con
     9.buy product          --con
     10.add product--seller
-    11. delete product -->changd descrip/ change stock/ change price
+    11. delete product -->
     12.  edit product--seller
+    changd descrip/ change stock/ change price
 
 */
 void Platform ::process_choice(int choice) {
@@ -362,6 +367,9 @@ void Platform ::process_choice(int choice) {
     break;
   case 9:
     purchase_pdt();
+    break;
+  case 10:
+    add_pdt();
     break;
   }
 }
@@ -541,10 +549,64 @@ void Platform::top_up() {
 
 void Platform::purchase_pdt() {
   cout << "Purchasing product" << endl;
-  unsigned int id;
-  int type;
+  unsigned int id, amount;
+  int type, found = 0;
+  vector<product>::iterator it;
   cout << "please enter the product id you want " << endl;
   cin >> id;
+  cout << "please enter number you want to buy" << endl;
+  cin >> amount;
   type = id / MAX_PRODUCT;
+  switch (type) {
+  case FOOD:
+    it = find(all_food.begin(), all_food.end(), id);
+    if (it == all_food.end()) // not found
+    {
+      cout << "Product not found" << endl;
+
+    } else
+      found = 1;
+
+    break;
+  case CLOTH:
+    it = find(all_cloth.begin(), all_cloth.end(), id);
+    if (it == all_cloth.end()) // not found
+    {
+      cout << "Product not found" << endl;
+
+    } else
+      found = 1;
+
+    break;
+  case BOOK:
+    it = find(all_book.begin(), all_book.end(), id);
+    if (it == all_book.end()) // not found
+    {
+      cout << "Product not found" << endl;
+
+    } else
+      found = 1;
+    break;
+  }
+  if (found) { // found
+    if (cur_account->GetBalence() >= it->GetPrice() * amount) {
+      if (it->GetStock() > amount) {
+        it->ChangeStock(-1 * amount);
+        cur_account->SubBalance(amount * it->GetPrice());
+        it->GetSellerAccount()->AddBalance(it->GetPrice() * amount);
+        cout << "Purchase successfully" << endl;
+      } else
+        cout << "Not enough balance" << endl;
+    } else
+      cout << "Not enough product in stock" << endl;
+  }
+}
+
+void Platform::add_pdt() {
+  cout << "adding product" << endl;
+  string dscrip;
+  int type, stock;
+  float price;
+  unsigned int id, sellerid;
 }
 #endif

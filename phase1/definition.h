@@ -80,6 +80,7 @@ public:
   virtual unsigned int Getid() { return id; }
 
   bool operator<(const account &str) const { return (id < str.id); }
+  bool operator==(const unsigned short &fid) { return (id == fid); }
 
 private:
   string name;
@@ -154,6 +155,7 @@ public:
     else
       return (id < str.id);
   }
+  bool operator==(const unsigned short &fid) { return (id == fid); }
 
 private:
   string Descrip;
@@ -215,6 +217,7 @@ public:
   void change_password();
   void top_up();
   void purchase_pdt();
+  void add_pdt();
 
 private:
   vector<seller> all_seller;
