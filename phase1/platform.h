@@ -287,6 +287,7 @@ int Platform::Get_option() {
     cout << i << ". edit product" << endl; // 8
     i++;
   }
+  cout << i << ". back to option page" << endl;
   cout << "q.quiting\n";
   cout << "\n"
        << "Please enter your choice number" << endl;
@@ -295,7 +296,8 @@ int Platform::Get_option() {
     return -1;
   }
   cin >> choice;
-
+  if (choice == i)
+    return 20; // skip the swithch branch
   if (choice < 3)
     return choice;
   if (choice < 5 && account_type == -1)
@@ -343,6 +345,24 @@ void Platform ::process_choice(int choice) {
     break;
   case 4:
     login();
+    break;
+  case 5:
+    change_password();
+    break;
+  case 6:
+    cout << "your balance is : " << cur_account->GetBalence() << endl;
+    break;
+  case 7:
+    cur_account = NULL;
+    account_type = -1;
+    cout << "log out successfully" << endl;
+    break;
+  case 8:
+    top_up();
+    break;
+  case 9:
+    purchase_pdt();
+    break;
   }
 }
 
@@ -403,7 +423,7 @@ void Platform ::create_new_act() {
   string username, password;
   unsigned int id;
   int type;
-  cout << "Type.1 for seller,2 for consumer";
+  cout << "Type.1 for seller,2 for consumer" << endl;
   cin >> type;
   cout << "username" << endl;
   cin >> username;
@@ -495,5 +515,36 @@ void Platform::login() {
       cout << "Account not found.please check your input" << endl;
     }
   }
+}
+
+void Platform::change_password() {
+  cout << "Change password" << endl;
+  string old_pswd, new_pswd;
+  cout << "old passowrd";
+  cin >> old_pswd;
+  cout << "new password";
+  cin >> new_pswd;
+  if (cur_account->changePassword(old_pswd, new_pswd)) // oldpassowrd is corrct
+  {
+    cout << "Change Successfully" << endl;
+  } else
+    cout << "incorrect password,please try again" << endl;
+}
+void Platform::top_up() {
+  cout << "top up" << endl;
+  float add;
+  cout << "amount you want to add:" << endl;
+  cin >> add;
+  cur_account->AddBalance(add);
+  cout << "add successfully" << endl;
+}
+
+void Platform::purchase_pdt() {
+  cout << "Purchasing product" << endl;
+  unsigned int id;
+  int type;
+  cout << "please enter the product id you want " << endl;
+  cin >> id;
+  type = id / MAX_PRODUCT;
 }
 #endif

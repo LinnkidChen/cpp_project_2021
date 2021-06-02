@@ -28,13 +28,15 @@ using std::vector;
 #define BOOK 13
 
 #define CART_SIZE 20
-#define MAX_PRODUCT 100 // max product count for each seller
+#define CHOISE_COUNT 12
+#define MAX_PRODUCT 1000 // max product count for each seller
 #define MAX_SELLER_COUNT 200
 #define MAX_CONSUMER_COUNT 2000
 #define FORMAT_NAME_WID 25
 #define FORMAT_PRICE_WID 12
 #define FORMAT_BAR_FRONT 40
 #define FORMAT_BAR_RARE 25
+
 /*-----------------------------------------------------*/
 class account {
 public:
@@ -210,6 +212,9 @@ public:
   void create_new_act();
   unsigned int genrate_account_id(int type);
   void login();
+  void change_password();
+  void top_up();
+  void purchase_pdt();
 
 private:
   vector<seller> all_seller;

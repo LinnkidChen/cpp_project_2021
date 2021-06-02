@@ -45,11 +45,11 @@ int main() {
     if (choice == -1) {
       cout << "Exiting program." << endl;
       break;
-    } else {
+    } else if (choice <= CHOISE_COUNT) {
       platform.process_choice(choice);
+      getchar();
+      getchar();
     }
-    getchar();
-    getchar();
   }
   platform.write_back_file();
   //   string input;
