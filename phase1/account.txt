@@ -5,7 +5,7 @@
 1 sell35er mima 30 9
 1 sel4ler mima 30 12
 1 se56ller mima 30 15
-1 admin meiyoumima 999 999
+1 admin youmima 999 999
 1 linnkid linjide 0 1000
 1 linjide linjide 0 1001
 2 consumer mimia 20 2

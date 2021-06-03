@@ -203,11 +203,12 @@ void Platform ::print_all_pdt(int type) {
          << setfill(' ');
 
     cout << setw(FORMAT_NAME_WID) << "Name" << setw(FORMAT_PRICE_WID) << "Price"
-         << setw(FORMAT_PRICE_WID) << "ID" << setw(FORMAT_PRICE_WID)
-         << "SELLER_ID" << endl;
+         << setw(FORMAT_PRICE_WID) << "Stock" << setw(FORMAT_PRICE_WID) << "ID"
+         << setw(FORMAT_PRICE_WID) << "SELLER_ID" << endl;
     for (int i = 0; i < all_book.size(); i++) {
       cout << setw(FORMAT_NAME_WID) << all_book[i].GetDscrip()
            << setw(FORMAT_PRICE_WID) << all_book[i].GetPrice()
+           << setw(FORMAT_PRICE_WID) << all_book[i].GetStock()
            << setw(FORMAT_PRICE_WID) << all_book[i].GetId()
            << setw(FORMAT_PRICE_WID) << all_book[i].GetSellerId() << endl;
     }
@@ -222,11 +223,12 @@ void Platform ::print_all_pdt(int type) {
          << setfill(' ');
 
     cout << setw(FORMAT_NAME_WID) << "Name" << setw(FORMAT_PRICE_WID) << "Price"
-         << setw(FORMAT_PRICE_WID) << "ID" << setw(FORMAT_PRICE_WID)
-         << "SELLER_ID" << endl;
+         << setw(FORMAT_PRICE_WID) << "Stock" << setw(FORMAT_PRICE_WID) << "ID"
+         << setw(FORMAT_PRICE_WID) << "SELLER_ID" << endl;
     for (int i = 0; i < all_cloth.size(); i++) {
       cout << setw(FORMAT_NAME_WID) << all_cloth[i].GetDscrip()
            << setw(FORMAT_PRICE_WID) << all_cloth[i].GetPrice()
+           << setw(FORMAT_PRICE_WID) << all_cloth[i].GetStock()
            << setw(FORMAT_PRICE_WID) << all_cloth[i].GetId()
            << setw(FORMAT_PRICE_WID) << all_cloth[i].GetSellerId() << endl;
     }
@@ -240,11 +242,12 @@ void Platform ::print_all_pdt(int type) {
          << setfill(' ');
 
     cout << setw(FORMAT_NAME_WID) << "Name" << setw(FORMAT_PRICE_WID) << "Price"
-         << setw(FORMAT_PRICE_WID) << "ID" << setw(FORMAT_PRICE_WID)
-         << "SELLER_ID" << endl;
+         << setw(FORMAT_PRICE_WID) << "Stock" << setw(FORMAT_PRICE_WID) << "ID"
+         << setw(FORMAT_PRICE_WID) << "SELLER_ID" << endl;
     for (int i = 0; i < all_food.size(); i++) {
       cout << setw(FORMAT_NAME_WID) << all_food[i].GetDscrip()
            << setw(FORMAT_PRICE_WID) << all_food[i].GetPrice()
+           << setw(FORMAT_PRICE_WID) << all_food[i].GetStock()
            << setw(FORMAT_PRICE_WID) << all_food[i].GetId()
            << setw(FORMAT_PRICE_WID) << all_food[i].GetSellerId() << endl;
     }
@@ -357,7 +360,7 @@ int Platform::Get_option() {
     cout << i << ". edit product" << endl; // 8
     i++;
   }
-  cout << i << ". back to option page" << endl;
+  //   cout << i << ". back to option page" << endl;
   cout << "q.quiting\n";
   cout << "\n"
        << "Please enter your choice number" << endl;
@@ -604,9 +607,9 @@ void Platform::login() {
 void Platform::change_password() {
   cout << "Change password" << endl;
   string old_pswd, new_pswd;
-  cout << "old passowrd";
+  cout << "old passowrd" << endl;
   cin >> old_pswd;
-  cout << "new password";
+  cout << "new password" << endl;
   cin >> new_pswd;
   if (cur_account->changePassword(old_pswd, new_pswd)) // oldpassowrd is corrct
   {
@@ -688,9 +691,9 @@ void Platform::add_pdt() {
   cin >> type;
   cout << "description" << endl;
   cin >> dscrip;
-  cout << "stock";
+  cout << "stock" << endl;
   cin >> stock;
-  cout << "price";
+  cout << "price" << endl;
   cin >> price;
 
   id = genrate_pdt_id(type);
@@ -738,6 +741,7 @@ unsigned int Platform::genrate_pdt_id(int type) {
 }
 void Platform::del_pdt() {
   cout << "delete product" << endl;
+  print_my_product((seller *)cur_account);
   unsigned int id;
   int type, deleted;
   deleted = 0;
@@ -847,6 +851,23 @@ void Platform::search_my_pdt(int type, unsigned int id,
         break;
       }
     }
+  }
+}
+void Platform ::print_my_product(seller *cur_act) {
+  vector<product>::iterator it;
+  cout << setw(FORMAT_BAR_FRONT) << setfill('-') << "PRINTING MY CLOTHES"
+       << setw(FORMAT_BAR_RARE) << "" << endl
+       << setfill(' ');
+
+  cout << setw(FORMAT_NAME_WID) << "Name" << setw(FORMAT_PRICE_WID) << "Price"
+       << setw(FORMAT_PRICE_WID) << "STOCK" << setw(FORMAT_PRICE_WID) << "ID"
+       << setw(FORMAT_PRICE_WID) << "SELLER_ID" << endl;
+  for (it = cur_act->fst_clth; it->GetSellerId() == cur_account->Getid();
+       it++) {
+    cout << setw(FORMAT_NAME_WID) << it->GetDscrip() << setw(FORMAT_PRICE_WID)
+         << it->GetPrice() << setw(FORMAT_PRICE_WID) << it->GetStock()
+         << setw(FORMAT_PRICE_WID) << it->GetId() << setw(FORMAT_PRICE_WID)
+         << it->GetSellerId() << endl;
   }
 }
 #endif
