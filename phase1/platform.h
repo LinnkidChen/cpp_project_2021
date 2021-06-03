@@ -818,6 +818,9 @@ void Platform ::print_my_product(seller *cur_act, int type) {
       if (it_f == all_food.end()) {
         type = -1;
         break;
+      } else if (it_f->GetDscrip().empty()) {
+        type = -1;
+        break;
       }
     }
     if (type > 0) {
@@ -829,7 +832,7 @@ void Platform ::print_my_product(seller *cur_act, int type) {
            << "Price" << setw(FORMAT_PRICE_WID) << "STOCK"
            << setw(FORMAT_PRICE_WID) << "ID" << setw(FORMAT_PRICE_WID)
            << "SELLER_ID" << endl;
-      for (; it_f->GetSellerId() == cur_account->Getid(); it_f++) {
+      for (; it_f->GetSellerId() == cur_account->Getid();) {
         cout << setw(FORMAT_NAME_WID) << it_f->GetDscrip()
              << setw(FORMAT_PRICE_WID) << it_f->GetPrice()
              << setw(FORMAT_PRICE_WID) << it_f->GetStock()
@@ -838,6 +841,9 @@ void Platform ::print_my_product(seller *cur_act, int type) {
         cout << setw(FORMAT_BAR_FRONT) << setfill('-') << "END OF PRINT"
              << setw(FORMAT_BAR_RARE) << "" << endl
              << setfill(' ');
+        it_f++;
+        if (it_f == all_food.end())
+          break;
       }
     }
 
@@ -850,35 +856,7 @@ void Platform ::print_my_product(seller *cur_act, int type) {
       if (it_b == all_book.end()) {
         type = -1;
         break;
-      }
-    }
-    if (type) {
-      cout << setw(FORMAT_BAR_FRONT) << setfill('-') << "PRINTING MY BOOK"
-           << setw(FORMAT_BAR_RARE) << "" << endl
-           << setfill(' ');
-
-      cout << setw(FORMAT_NAME_WID) << "Name" << setw(FORMAT_PRICE_WID)
-           << "Price" << setw(FORMAT_PRICE_WID) << "STOCK"
-           << setw(FORMAT_PRICE_WID) << "ID" << setw(FORMAT_PRICE_WID)
-           << "SELLER_ID" << endl;
-      for (; it_b->GetSellerId() == cur_account->Getid(); it_b++) {
-        cout << setw(FORMAT_NAME_WID) << it_b->GetDscrip()
-             << setw(FORMAT_PRICE_WID) << it_b->GetPrice()
-             << setw(FORMAT_PRICE_WID) << it_b->GetStock()
-             << setw(FORMAT_PRICE_WID) << it_b->GetId()
-             << setw(FORMAT_PRICE_WID) << it_b->GetSellerId() << endl;
-        cout << setw(FORMAT_BAR_FRONT) << setfill('-') << "END OF PRINT"
-             << setw(FORMAT_BAR_RARE) << "" << endl
-             << setfill(' ');
-      }
-    }
-
-    break;
-  case CLOTH:
-    it_c = all_cloth.begin();
-    while (it_c->GetSellerId() != cur_account->Getid()) {
-      it_c++;
-      if (it_c == all_cloth.end()) {
+      } else if (it_b->GetDscrip().empty()) {
         type = -1;
         break;
       }
@@ -892,7 +870,44 @@ void Platform ::print_my_product(seller *cur_act, int type) {
            << "Price" << setw(FORMAT_PRICE_WID) << "STOCK"
            << setw(FORMAT_PRICE_WID) << "ID" << setw(FORMAT_PRICE_WID)
            << "SELLER_ID" << endl;
-      for (; it_c->GetSellerId() == cur_account->Getid(); it_c++) {
+      for (; it_b->GetSellerId() == cur_account->Getid();) {
+        cout << setw(FORMAT_NAME_WID) << it_b->GetDscrip()
+             << setw(FORMAT_PRICE_WID) << it_b->GetPrice()
+             << setw(FORMAT_PRICE_WID) << it_b->GetStock()
+             << setw(FORMAT_PRICE_WID) << it_b->GetId()
+             << setw(FORMAT_PRICE_WID) << it_b->GetSellerId() << endl;
+        cout << setw(FORMAT_BAR_FRONT) << setfill('-') << "END OF PRINT"
+             << setw(FORMAT_BAR_RARE) << "" << endl
+             << setfill(' ');
+        it_b++;
+        if (it_b == all_book.end())
+          break;
+      }
+    }
+
+    break;
+  case CLOTH:
+    it_c = all_cloth.begin();
+    while (it_c->GetSellerId() != cur_account->Getid()) {
+      it_c++;
+      if (it_c == all_cloth.end()) {
+        type = -1;
+        break;
+      } else if (it_c->GetDscrip().empty()) {
+        type = -1;
+        break;
+      }
+    }
+    if (type) {
+      cout << setw(FORMAT_BAR_FRONT) << setfill('-') << "PRINTING MY CLOTH"
+           << setw(FORMAT_BAR_RARE) << "" << endl
+           << setfill(' ');
+
+      cout << setw(FORMAT_NAME_WID) << "Name" << setw(FORMAT_PRICE_WID)
+           << "Price" << setw(FORMAT_PRICE_WID) << "STOCK"
+           << setw(FORMAT_PRICE_WID) << "ID" << setw(FORMAT_PRICE_WID)
+           << "SELLER_ID" << endl;
+      for (; it_c->GetSellerId() == cur_account->Getid();) {
         cout << setw(FORMAT_NAME_WID) << it_c->GetDscrip()
              << setw(FORMAT_PRICE_WID) << it_c->GetPrice()
              << setw(FORMAT_PRICE_WID) << it_c->GetStock()
@@ -901,6 +916,9 @@ void Platform ::print_my_product(seller *cur_act, int type) {
         cout << setw(FORMAT_BAR_FRONT) << setfill('-') << "END OF PRINT"
              << setw(FORMAT_BAR_RARE) << "" << endl
              << setfill(' ');
+        it_c++;
+        if (it_c == all_cloth.end())
+          break;
       }
     }
 
