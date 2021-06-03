@@ -225,7 +225,7 @@ public:
   void edt_pdt();
   void search_my_pdt(int type, unsigned int id,
                      vector<product>::iterator &cur_pdt, seller *cur);
-  void print_my_product(seller *cur_act, int type);
+  void print_my_product(int type);
 
 private:
   vector<seller> all_seller;

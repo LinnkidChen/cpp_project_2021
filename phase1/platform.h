@@ -300,7 +300,6 @@ int Platform::Get_option() {
   cout << "\n"
        << "Please enter your choice number" << endl;
   if (cin.peek() == 'q') {
-
     return -1;
   }
   cin >> choice;
@@ -676,9 +675,9 @@ unsigned int Platform::genrate_pdt_id(int type) {
 }
 void Platform::del_pdt() {
   cout << "delete product" << endl;
-  print_my_product((seller *)cur_account, FOOD);
-  print_my_product((seller *)cur_account, BOOK);
-  print_my_product((seller *)cur_account, CLOTH);
+  print_my_product(FOOD);
+  print_my_product(BOOK);
+  print_my_product(CLOTH);
   unsigned int id;
   int type, deleted;
   deleted = 0;
@@ -709,15 +708,12 @@ void Platform::del_pdt() {
         deleted = 1;
       }
     }
-    if (deleted) {
-      cout << "delete successfully" << endl;
-
-    } else
-      cout << "target not found" << endl;
-
-  default:
-    break;
   }
+  if (deleted == 1) {
+    cout << "delete successfully" << endl;
+
+  } else
+    cout << "target not found" << endl;
 }
 
 void Platform::edt_pdt() {
@@ -728,7 +724,9 @@ void Platform::edt_pdt() {
   vector<product>::iterator cur_pdt;
   float price = -1;
   int stock = -1;
-
+  print_my_product(FOOD);
+  print_my_product(BOOK);
+  print_my_product(CLOTH);
   cout << "enter type.1 descrip,2 price,3 stock" << endl;
   cin >> type;
   cout << "enter product id" << endl;
@@ -806,7 +804,7 @@ void Platform::search_my_pdt(int type, unsigned int id,
     }
   }
 }
-void Platform ::print_my_product(seller *cur_act, int type) {
+void Platform ::print_my_product(int type) {
   vector<food>::iterator it_f;
   vector<book>::iterator it_b;
   vector<cloth>::iterator it_c;
@@ -861,7 +859,7 @@ void Platform ::print_my_product(seller *cur_act, int type) {
         break;
       }
     }
-    if (type) {
+    if (type > 0) {
       cout << setw(FORMAT_BAR_FRONT) << setfill('-') << "PRINTING MY BOOK"
            << setw(FORMAT_BAR_RARE) << "" << endl
            << setfill(' ');
@@ -898,7 +896,7 @@ void Platform ::print_my_product(seller *cur_act, int type) {
         break;
       }
     }
-    if (type) {
+    if (type > 0) {
       cout << setw(FORMAT_BAR_FRONT) << setfill('-') << "PRINTING MY CLOTH"
            << setw(FORMAT_BAR_RARE) << "" << endl
            << setfill(' ');
