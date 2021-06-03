@@ -63,6 +63,6 @@ int main() {
 }
 
 void Platform::test() {
-  cur_account = &all_seller[7];
-  account_type = SELLER;
+  cur_account = &all_consumer[7];
+  account_type = CONSUMER;
 }

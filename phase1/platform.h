@@ -286,6 +286,7 @@ int Platform::Get_option() {
     cout << i << ".  top up" << endl; // 6
     i++;
     cout << i << ". buy product" << endl; // 7
+    i++;
   }
   if (account_type == SELLER) {
     cout << i << ". add product" << endl; // 6
@@ -303,7 +304,7 @@ int Platform::Get_option() {
     return -1;
   }
   cin >> choice;
-  if (choice == i)
+  if (choice >= i)
     return 20; // skip the swithch branch
   if (choice < 3)
     return choice;
@@ -565,6 +566,9 @@ void Platform::purchase_pdt() {
   unsigned int id, amount;
   int type, found = 0;
   vector<product>::iterator it;
+  print_all_pdt(FOOD);
+  print_all_pdt(CLOTH);
+  print_all_pdt(BOOK);
   cout << "please enter the product id you want " << endl;
   cin >> id;
   cout << "please enter number you want to buy" << endl;
@@ -603,7 +607,7 @@ void Platform::purchase_pdt() {
   }
   if (found) { // found
     if (cur_account->GetBalence() >= it->GetPrice() * amount) {
-      if (it->GetStock() > amount) {
+      if (it->GetStock() >= amount) {
         it->ChangeStock(-1 * amount);
         cur_account->SubBalance(amount * it->GetPrice());
         it->GetSellerAccount()->AddBalance(it->GetPrice() * amount);
@@ -747,12 +751,16 @@ void Platform::edt_pdt() {
     break;
   }
   search_my_pdt(pdt_type, id, cur_pdt, (seller *)cur_account);
-  if (price) {
+  if (price > 0) {
     cur_pdt->ChangePrice(price);
-  } else if (stock) {
+    cout << "change price done" << endl;
+  } else if (stock > 0) {
     cur_pdt->ChangeStock(stock);
-  } else
+    cout << "change stock done" << endl;
+  } else {
     cur_pdt->ChangeDscrip(descrip);
+    cout << "change description done" << endl;
+  }
 }
 void Platform::search_my_pdt(int type, unsigned int id,
                              vector<product>::iterator &cur_pdt,
