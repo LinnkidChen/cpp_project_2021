@@ -100,7 +100,6 @@ public:
       : account(name_, password_, balance_, id_){};
   int GetUserType() { return SELLER; }
   using account::operator<;
-  vector<class product>::iterator fst_book, fst_clth, fst_fod;
 };
 
 class consumer : public account {
@@ -205,6 +204,7 @@ private:
 };
 class Platform {
 public:
+  void test();
   void init_load_file(); // load in user and product
   void login_signin();
   void print_all_pdt(int type); // print all_product in type
@@ -225,7 +225,7 @@ public:
   void edt_pdt();
   void search_my_pdt(int type, unsigned int id,
                      vector<product>::iterator &cur_pdt, seller *cur);
-  void print_my_product(seller *cur_act);
+  void print_my_product(seller *cur_act, int type);
 
 private:
   vector<seller> all_seller;

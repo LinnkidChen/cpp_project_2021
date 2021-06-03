@@ -13,7 +13,8 @@ options
 4. search product
 
  支持对同一品类下所有产品打折的活动
- 已经优化，让商家知道自己每个品类第一个位置在哪。可以优化for循环中的搜索算法
+ 已经优化，让商家知道自己每个品类第一个位置在哪。可以优化for循环中的搜索算法-->行不通
+用于储存containner某一位置的的iterator是不可靠的 debug到delete product
 */
 #include "definition.h"
 #include "platform.h"
@@ -41,7 +42,7 @@ int main() {
   int choice;
 
   platform.init_load_file();
-
+  platform.test();
   while (true) {
     choice = platform.Get_option();
     if (choice == -1) {
@@ -59,4 +60,9 @@ int main() {
   //     cin >> input;
   //   }
   return 0;
+}
+
+void Platform::test() {
+  cur_account = &all_seller[7];
+  account_type = SELLER;
 }
