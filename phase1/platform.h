@@ -574,6 +574,7 @@ void Platform::login() {
       if (all_seller[loc].checkPassword(password)) { // password correct
         cur_account = &all_seller[loc];
         account_type = SELLER;
+        cout << "Log in successfully" << endl;
       } else // password incorrect
         cout << "Incorrect password.Please try again." << endl;
     } else {
@@ -590,6 +591,7 @@ void Platform::login() {
       if (all_consumer[loc].checkPassword(password)) { // password correct
         cur_account = &all_consumer[loc];
         account_type = CONSUMER;
+        cout << "Log in successfully" << endl;
       } else // password incorrect
         cout << "Incorrect password.Please try again." << endl;
     } else {
