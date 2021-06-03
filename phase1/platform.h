@@ -82,9 +82,7 @@ void Platform::init_load_file() {
   std::sort(all_food.begin(), all_food.end());
   std::sort(all_cloth.begin(), all_cloth.end());
   std::sort(all_book.begin(), all_book.end());
-  unsigned int pdt_id;
-  unsigned int slr_id;
-  slr_id = all_seller.front().Getid();
+
   int i, q;
   q = 0;
   i = 0;
@@ -98,6 +96,8 @@ void Platform::init_load_file() {
       }
       q++;
     }
+    if (i == all_book.size())
+      break;
     if (all_book[i].GetSellerId() > all_seller[q].Getid())
       q++;
     if (all_book[i].GetSellerId() > all_seller[q].Getid())
@@ -117,6 +117,8 @@ void Platform::init_load_file() {
       }
       q++;
     }
+    if (i == all_cloth.size())
+      break;
     if (all_cloth[i].GetSellerId() > all_seller[q].Getid())
       q++;
     if (all_cloth[i].GetSellerId() > all_seller[q].Getid())
@@ -136,6 +138,8 @@ void Platform::init_load_file() {
       }
       q++;
     }
+    if (i == all_food.size())
+      break;
     if (all_food[i].GetSellerId() > all_seller[q].Getid())
       q++;
     if (all_food[i].GetSellerId() > all_seller[q].Getid())
@@ -506,7 +510,12 @@ void Platform ::create_new_act() {
   cin >> password;
 
   id = genrate_account_id(type);
-
+  if (id == 0)
+    cout << "username already in use" << endl;
+  if (password.empty() || username.empty()) {
+    cout << "invalid input" << endl;
+    id = 0;
+  }
   if (type == CONSUMER) {
     for (int i = 0; i < all_consumer.size(); i++) {
       if (username == all_consumer[i].GetName()) {
@@ -518,8 +527,7 @@ void Platform ::create_new_act() {
       consumer csmr(username, password, 0, id);
       all_consumer.push_back(csmr);
       cout << "Create successfully!" << endl;
-    } else
-      cout << "Username alredy in use." << endl;
+    }
   }
   if (type == SELLER) {
     for (int i = 0; i < all_seller.size(); i++) {
@@ -532,8 +540,7 @@ void Platform ::create_new_act() {
       seller slr(username, password, 0, id);
       all_seller.push_back(slr);
       cout << "Create successfully!" << endl;
-    } else
-      cout << "Username alredy in use." << endl;
+    }
   }
 }
 unsigned int Platform::genrate_account_id(int type) {

@@ -7,6 +7,8 @@
 1 se56ller mima 30 15
 1 admin meiyoumima 999 999
 1 linnkid linjide 0 1000
+1 linjide linjide 0 1001
+1 bushibenren 0 1002
 2 consumer mimia 20 2
 2 co6nsumer mimia 20 4
 2 c4onsumer mimia 20 6
