@@ -230,18 +230,18 @@ public:
   void del_pdt();
   void edt_pdt();
   void search_my_pdt(int type, unsigned int id,
-                     vector<product>::iterator &cur_pdt, seller *cur);
+                     list<product>::iterator &cur_pdt, seller *cur);
   void print_my_product(int type);
 
 private:
-  vector<seller> all_seller;
-  vector<consumer> all_consumer;
+  list<seller> all_seller;
+  list<consumer> all_consumer;
   account *cur_account;
   int account_type; //-1 signed out. 1 seller  2 consumer
 
-  vector<book> all_book;
-  vector<cloth> all_cloth;
-  vector<food> all_food;
+  list<book> all_book;
+  list<cloth> all_cloth;
+  list<food> all_food;
 };
 
 #endif

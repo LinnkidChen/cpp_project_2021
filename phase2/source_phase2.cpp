@@ -75,6 +75,6 @@ int main() {
 }
 
 void Platform::test() {
-  cur_account = &all_consumer[2];
-  ((consumer *)(cur_account))->cart_.add_pdt(1, (all_book));
+  //   cur_account = &all_consumer[2];
+  //   ((consumer *)(cur_account))->cart_.add_pdt(1, (product *)(&all_book[2]));
 }
