@@ -17,9 +17,16 @@ options
 用于储存containner某一位置的的iterator是不可靠的 debug到delete product
 
 ver2
-log out/退出程序的时候会交还冻结的商品
+退出程序的时候会交还所有账户冻结的商品
 新增购物车功能
     购物车数量==0 -> 增加商品到购物车 输入id 数量 帮助冻结商品
+    购物车数量>0 -> 增加商品
+                    减少某个商品固定数量->若输入数量大于等于购物车内数量，在购物车内删除整个商品
+                ->删除整个商品
+                ->生成订单 选择商品生成订单 ->在购物车结构体内定义selected
+                                        ->支持全选结账
+
+
 */
 #include "definition.h"
 #include "platform.h"
@@ -68,6 +75,6 @@ int main() {
 }
 
 void Platform::test() {
-  cur_account = &all_consumer[7];
-  account_type = CONSUMER;
+  cur_account = &all_consumer[2];
+  ((consumer *)(cur_account))->cart_.add_pdt(1, (all_book));
 }

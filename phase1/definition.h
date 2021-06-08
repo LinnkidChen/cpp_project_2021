@@ -5,14 +5,15 @@
 #include <fstream>
 #include <iostream>
 #include <iterator>
+
 #include <sstream> //convert num in string to int
 #include <vector>
-
 /*-------------------------------------------------------*/
 
 using std::cin;
 using std::cout;
 using std::endl;
+
 using std::setfill;
 using std::setw;
 using std::string;
@@ -108,8 +109,12 @@ public:
            unsigned int id_ = 0)
       : account(name_, password_, balance_, id_){};
   int GetUserType() { return CONSUMER; }
+  void genrate_order();
+  int check_odr_valid();
+
   using account::operator<;
-  //   cart_product * cart
+
+  cart cart_;
 };
 
 class product {
@@ -202,6 +207,7 @@ public:
 private:
   int type;
 };
+
 class Platform {
 public:
   void test();

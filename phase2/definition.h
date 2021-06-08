@@ -5,14 +5,15 @@
 #include <fstream>
 #include <iostream>
 #include <iterator>
+#include <list>
 #include <sstream> //convert num in string to int
 #include <vector>
-
 /*-------------------------------------------------------*/
 
 using std::cin;
 using std::cout;
 using std::endl;
+using std::list;
 using std::setfill;
 using std::setw;
 using std::string;
@@ -38,6 +39,7 @@ using std::vector;
 #define FORMAT_BAR_RARE 25
 
 /*-----------------------------------------------------*/
+class product;
 
 class account {
 public:
@@ -93,6 +95,24 @@ private:
     account format in file: type_code name password balance id
     product format in file: type description price stock id seller_id
 */
+
+class cart_pdt {
+  product *pdt_ptr;
+  int num;
+  int seq;
+  int selected;
+};
+class cart {
+public:
+  void add_pdt(int id, product *pdt_ptr);
+  void remove_pdt(int seq);
+
+  void add_pdt_num(int seq, int num);
+  void dec_pdt_num(int seq, int num);
+
+private:
+  list<cart_pdt> pdt;
+};
 class seller : public account {
 public:
   seller(string name_ = NULL, string password_ = NULL, float balance_ = 0,
@@ -109,7 +129,7 @@ public:
       : account(name_, password_, balance_, id_){};
   int GetUserType() { return CONSUMER; }
   using account::operator<;
-  //   cart_product * cart
+  cart cart_;
 };
 
 class product {
@@ -202,6 +222,7 @@ public:
 private:
   int type;
 };
+
 class Platform {
 public:
   void test();
