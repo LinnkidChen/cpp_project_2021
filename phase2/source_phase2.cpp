@@ -26,6 +26,7 @@ ver2
                 ->生成订单 选择商品生成订单 ->在购物车结构体内定义selected
                                         ->支持全选结账
 
+当前进度/：用list替换vector 仍在进行中
 
 */
 #include "definition.h"
