@@ -5,15 +5,14 @@
 #include <fstream>
 #include <iostream>
 #include <iterator>
-
 #include <sstream> //convert num in string to int
 #include <vector>
+
 /*-------------------------------------------------------*/
 
 using std::cin;
 using std::cout;
 using std::endl;
-
 using std::setfill;
 using std::setw;
 using std::string;
@@ -109,12 +108,8 @@ public:
            unsigned int id_ = 0)
       : account(name_, password_, balance_, id_){};
   int GetUserType() { return CONSUMER; }
-  void genrate_order();
-  int check_odr_valid();
-
   using account::operator<;
-
-  cart cart_;
+  //   cart_product * cart
 };
 
 class product {
@@ -207,7 +202,6 @@ public:
 private:
   int type;
 };
-
 class Platform {
 public:
   void test();
@@ -230,18 +224,18 @@ public:
   void del_pdt();
   void edt_pdt();
   void search_my_pdt(int type, unsigned int id,
-                     list<product>::iterator &cur_pdt, seller *cur);
+                     vector<product>::iterator &cur_pdt, seller *cur);
   void print_my_product(int type);
 
 private:
-  list<seller> all_seller;
-  list<consumer> all_consumer;
+  vector<seller> all_seller;
+  vector<consumer> all_consumer;
   account *cur_account;
   int account_type; //-1 signed out. 1 seller  2 consumer
 
-  list<book> all_book;
-  list<cloth> all_cloth;
-  list<food> all_food;
+  vector<book> all_book;
+  vector<cloth> all_cloth;
+  vector<food> all_food;
 };
 
 #endif

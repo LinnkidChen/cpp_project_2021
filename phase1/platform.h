@@ -47,10 +47,9 @@ void Platform::init_load_file() {
       fin >> type >> descrip >> price >> stock >> id >> seller_id;
       if (type == FOOD) {
         food fod(descrip, price, stock, id, seller_id);
-        auto it = all_seller.begin();
-        for (; it != all_seller.end(); it++) {
-          if (it->Getid() == seller_id) {
-            fod.SetSellerAccount(&(*it));
+        for (int i = 0; i < all_seller.size(); i++) {
+          if (all_seller[i].Getid() == seller_id) {
+            fod.SetSellerAccount(&all_seller[i]);
             break;
           }
         }
@@ -58,10 +57,9 @@ void Platform::init_load_file() {
       }
       if (type == CLOTH) {
         cloth clt(descrip, price, stock, id, seller_id);
-        auto it = all_seller.begin();
-        for (; it != all_seller.end(); it++) {
-          if (it->Getid() == seller_id) {
-            clt.SetSellerAccount(&(*it));
+        for (int i = 0; i < all_seller.size(); i++) {
+          if (all_seller[i].Getid() == seller_id) {
+            clt.SetSellerAccount(&all_seller[i]);
             break;
           }
         }
@@ -69,10 +67,9 @@ void Platform::init_load_file() {
       }
       if (type == BOOK) {
         book bok(descrip, price, stock, id, seller_id);
-        auto it = all_seller.begin();
-        for (; it != all_seller.end(); it++) {
-          if (it->Getid() == seller_id) {
-            bok.SetSellerAccount(&(*it));
+        for (int i = 0; i < all_seller.size(); i++) {
+          if (all_seller[i].Getid() == seller_id) {
+            bok.SetSellerAccount(&all_seller[i]);
             break;
           }
         }
@@ -81,7 +78,7 @@ void Platform::init_load_file() {
       type = -1;
     }
   }
-  list<product>::iterator it;
+  vector<product>::iterator it;
   std::sort(all_food.begin(), all_food.end());
   std::sort(all_cloth.begin(), all_cloth.end());
   std::sort(all_book.begin(), all_book.end());
@@ -103,9 +100,10 @@ void Platform ::print_all_act(int type) {
 
     cout << setw(FORMAT_NAME_WID) << "Name" << setw(FORMAT_PRICE_WID)
          << "BALANCE" << setw(FORMAT_PRICE_WID) << "ID" << endl;
-    for (; it != all_seller.end(); it++) {
-      cout << setw(FORMAT_NAME_WID) << it->GetName() << setw(FORMAT_PRICE_WID)
-           << it->GetBalence() << setw(FORMAT_PRICE_WID) << it->Getid() << endl;
+    for (int i = 0; i < all_seller.size(); i++) {
+      cout << setw(FORMAT_NAME_WID) << all_seller[i].GetName()
+           << setw(FORMAT_PRICE_WID) << all_seller[i].GetBalence()
+           << setw(FORMAT_PRICE_WID) << all_seller[i].Getid() << endl;
     }
     cout << setw(FORMAT_BAR_FRONT) << setfill('-') << "END OF PRINTING"
          << setw(FORMAT_BAR_RARE) << "" << endl
@@ -119,9 +117,10 @@ void Platform ::print_all_act(int type) {
 
     cout << setw(FORMAT_NAME_WID) << "Name" << setw(FORMAT_PRICE_WID)
          << "BALANCE" << setw(FORMAT_PRICE_WID) << "ID" << endl;
-    for (auto it = all_consumer.begin(); it != all_consumer.end(); it++) {
-      cout << setw(FORMAT_NAME_WID) << it->GetName() << setw(FORMAT_PRICE_WID)
-           << it->GetBalence() << setw(FORMAT_PRICE_WID) << it->Getid() << endl;
+    for (int i = 0; i < all_consumer.size(); i++) {
+      cout << setw(FORMAT_NAME_WID) << all_consumer[i].GetName()
+           << setw(FORMAT_PRICE_WID) << all_consumer[i].GetBalence()
+           << setw(FORMAT_PRICE_WID) << all_consumer[i].Getid() << endl;
     }
     cout << setw(FORMAT_BAR_FRONT) << setfill('-') << "END OF PRINTING"
          << setw(FORMAT_BAR_RARE) << "" << endl
@@ -141,11 +140,12 @@ void Platform ::print_all_pdt(int type) {
     cout << setw(FORMAT_NAME_WID) << "Name" << setw(FORMAT_PRICE_WID) << "Price"
          << setw(FORMAT_PRICE_WID) << "Stock" << setw(FORMAT_PRICE_WID) << "ID"
          << setw(FORMAT_PRICE_WID) << "SELLER_ID" << endl;
-    for (auto it = all_book.begin(); it != all_book.end(); it++) {
-      cout << setw(FORMAT_NAME_WID) << it->GetDscrip() << setw(FORMAT_PRICE_WID)
-           << it->GetPrice() << setw(FORMAT_PRICE_WID) << it->GetStock()
-           << setw(FORMAT_PRICE_WID) << it->GetId() << setw(FORMAT_PRICE_WID)
-           << it->GetSellerId() << endl;
+    for (int i = 0; i < all_book.size(); i++) {
+      cout << setw(FORMAT_NAME_WID) << all_book[i].GetDscrip()
+           << setw(FORMAT_PRICE_WID) << all_book[i].GetPrice()
+           << setw(FORMAT_PRICE_WID) << all_book[i].GetStock()
+           << setw(FORMAT_PRICE_WID) << all_book[i].GetId()
+           << setw(FORMAT_PRICE_WID) << all_book[i].GetSellerId() << endl;
     }
     cout << setw(FORMAT_BAR_FRONT) << setfill('-') << "END OF PRINTING"
          << setw(FORMAT_BAR_RARE) << "" << endl
@@ -160,11 +160,12 @@ void Platform ::print_all_pdt(int type) {
     cout << setw(FORMAT_NAME_WID) << "Name" << setw(FORMAT_PRICE_WID) << "Price"
          << setw(FORMAT_PRICE_WID) << "Stock" << setw(FORMAT_PRICE_WID) << "ID"
          << setw(FORMAT_PRICE_WID) << "SELLER_ID" << endl;
-    for (auto it = all_cloth.begin(); it != all_cloth.end(); it++) {
-      cout << setw(FORMAT_NAME_WID) << it->GetDscrip() << setw(FORMAT_PRICE_WID)
-           << it->GetPrice() << setw(FORMAT_PRICE_WID) << it->GetStock()
-           << setw(FORMAT_PRICE_WID) << it->GetId() << setw(FORMAT_PRICE_WID)
-           << it->GetSellerId() << endl;
+    for (int i = 0; i < all_cloth.size(); i++) {
+      cout << setw(FORMAT_NAME_WID) << all_cloth[i].GetDscrip()
+           << setw(FORMAT_PRICE_WID) << all_cloth[i].GetPrice()
+           << setw(FORMAT_PRICE_WID) << all_cloth[i].GetStock()
+           << setw(FORMAT_PRICE_WID) << all_cloth[i].GetId()
+           << setw(FORMAT_PRICE_WID) << all_cloth[i].GetSellerId() << endl;
     }
     cout << setw(FORMAT_BAR_FRONT) << setfill('-') << "END OF PRINTING"
          << setw(FORMAT_BAR_RARE) << "" << endl
@@ -178,11 +179,12 @@ void Platform ::print_all_pdt(int type) {
     cout << setw(FORMAT_NAME_WID) << "Name" << setw(FORMAT_PRICE_WID) << "Price"
          << setw(FORMAT_PRICE_WID) << "Stock" << setw(FORMAT_PRICE_WID) << "ID"
          << setw(FORMAT_PRICE_WID) << "SELLER_ID" << endl;
-    for (auto it = all_food.begin(); it != all_food.end(); it++) {
-      cout << setw(FORMAT_NAME_WID) << it->GetDscrip() << setw(FORMAT_PRICE_WID)
-           << it->GetPrice() << setw(FORMAT_PRICE_WID) << it->GetStock()
-           << setw(FORMAT_PRICE_WID) << it->GetId() << setw(FORMAT_PRICE_WID)
-           << it->GetSellerId() << endl;
+    for (int i = 0; i < all_food.size(); i++) {
+      cout << setw(FORMAT_NAME_WID) << all_food[i].GetDscrip()
+           << setw(FORMAT_PRICE_WID) << all_food[i].GetPrice()
+           << setw(FORMAT_PRICE_WID) << all_food[i].GetStock()
+           << setw(FORMAT_PRICE_WID) << all_food[i].GetId()
+           << setw(FORMAT_PRICE_WID) << all_food[i].GetSellerId() << endl;
     }
     cout << setw(FORMAT_BAR_FRONT) << setfill('-') << "END OF PRINTING"
          << setw(FORMAT_BAR_RARE) << "" << endl
@@ -206,32 +208,39 @@ void Platform::write_back_file() {
   if (!fout.is_open()) {
     cout << "unable to open account.txt";
   } else {
-    for (; it != all_seller.end(); it++)
-      fout << it->GetUserType() << " " << it->GetName() << " " << it->GetPswd()
-           << " " << it->GetBalence() << " " << it->Getid() << endl;
+    for (int i = 0; i < all_seller.size(); i++)
+      fout << all_seller[i].GetUserType() << " " << all_seller[i].GetName()
+           << " " << all_seller[i].GetPswd() << " "
+           << all_seller[i].GetBalence() << " " << all_seller[i].Getid()
+           << endl;
 
-    for (auto it = all_consumer.begin(); it != all_consumer.end(); it++)
-      fout << it->GetUserType() << " " << it->GetName() << " " << it->GetPswd()
-           << " " << it->GetBalence() << " " << it->Getid() << endl;
+    for (int i = 0; i < all_consumer.size(); i++)
+      fout << all_consumer[i].GetUserType() << " " << all_consumer[i].GetName()
+           << " " << all_consumer[i].GetPswd() << " "
+           << all_consumer[i].GetBalence() << " " << all_consumer[i].Getid()
+           << endl;
   }
   fout.close();
   fout.open("product.txt");
   if (!fout.is_open()) {
     cout << "unable to open product.txt";
   } else {
-    for (auto it = all_food.begin(); it != all_food.end(); it++) {
-      fout << it->GetProductType() << " " << it->GetDscrip() << " "
-           << it->GetPrice() << " " << it->GetStock() << " " << it->GetId()
-           << " " << it->GetSellerId() << endl;
+    for (int i = 0; i < all_food.size(); i++) {
+      fout << all_food[i].GetProductType() << " " << all_food[i].GetDscrip()
+           << " " << all_food[i].GetPrice() << " " << all_food[i].GetStock()
+           << " " << all_food[i].GetId() << " " << all_food[i].GetSellerId()
+           << endl;
     }
-    for (auto it = all_cloth.begin(); it != all_cloth.end(); it++) {
-      fout << it->GetProductType() << " " << it->GetDscrip() << " "
-           << it->GetPrice() << " " << it->GetStock() << " " << it->GetId()
-           << " " << it->GetSellerId() << endl;
-      for (auto it = all_book.begin(); it != all_book.end(); it++) {
-        fout << it->GetProductType() << " " << it->GetDscrip() << " "
-             << it->GetPrice() << " " << it->GetStock() << " " << it->GetId()
-             << " " << it->GetSellerId() << endl;
+    for (int i = 0; i < all_cloth.size(); i++) {
+      fout << all_cloth[i].GetProductType() << " " << all_cloth[i].GetDscrip()
+           << " " << all_cloth[i].GetPrice() << " " << all_cloth[i].GetStock()
+           << " " << all_cloth[i].GetId() << " " << all_cloth[i].GetSellerId()
+           << endl;
+      for (int i = 0; i < all_book.size(); i++) {
+        fout << all_book[i].GetProductType() << " " << all_book[i].GetDscrip()
+             << " " << all_book[i].GetPrice() << " " << all_book[i].GetStock()
+             << " " << all_book[i].GetId() << " " << all_book[i].GetSellerId()
+             << endl;
       }
     }
   }
@@ -390,35 +399,35 @@ void Platform::search_product() {
   else if (!input.compare("BOOK"))
     print_all_pdt(BOOK);
   else {
-    for (auto it = all_book.begin(); it != all_book.end(); it++) {
-      if (it->GetDscrip().find(input) != string::npos ||
-          it->GetId() == id) { // found a match
+    for (int i = 0; i < all_book.size(); i++) {
+      if (all_book[i].GetDscrip().find(input) != string::npos ||
+          all_book[i].GetId() == id) { // found a match
         flag++;
-        cout << setw(FORMAT_NAME_WID) << it->GetDscrip()
-             << setw(FORMAT_PRICE_WID) << it->GetPrice()
-             << setw(FORMAT_PRICE_WID) << it->GetId() << setw(FORMAT_PRICE_WID)
-             << it->GetSellerId() << endl;
+        cout << setw(FORMAT_NAME_WID) << all_book[i].GetDscrip()
+             << setw(FORMAT_PRICE_WID) << all_book[i].GetPrice()
+             << setw(FORMAT_PRICE_WID) << all_book[i].GetId()
+             << setw(FORMAT_PRICE_WID) << all_book[i].GetSellerId() << endl;
       }
     }
-    for (auto it = all_cloth.begin(); it != all_cloth.end(); it++) {
-      if (it->GetDscrip().find(input) != string::npos ||
-          it->GetId() == id) { // found a match
+    for (int i = 0; i < all_cloth.size(); i++) {
+      if (all_cloth[i].GetDscrip().find(input) != string::npos ||
+          all_cloth[i].GetId() == id) { // found a match
         flag++;
-        cout << setw(FORMAT_NAME_WID) << it->GetDscrip()
-             << setw(FORMAT_PRICE_WID) << it->GetPrice()
-             << setw(FORMAT_PRICE_WID) << it->GetId() << setw(FORMAT_PRICE_WID)
-             << it->GetSellerId() << endl;
+        cout << setw(FORMAT_NAME_WID) << all_cloth[i].GetDscrip()
+             << setw(FORMAT_PRICE_WID) << all_cloth[i].GetPrice()
+             << setw(FORMAT_PRICE_WID) << all_cloth[i].GetId()
+             << setw(FORMAT_PRICE_WID) << all_cloth[i].GetSellerId() << endl;
       }
     }
-    for (auto it = all_food.begin(); it != all_food.end(); it++) {
+    for (int i = 0; i < all_food.size(); i++) {
 
-      if (it->GetDscrip().find(input) != string::npos ||
-          it->GetId() == id) { // found a match
+      if (all_food[i].GetDscrip().find(input) != string::npos ||
+          all_food[i].GetId() == id) { // found a match
         flag++;
-        cout << setw(FORMAT_NAME_WID) << it->GetDscrip()
-             << setw(FORMAT_PRICE_WID) << it->GetPrice()
-             << setw(FORMAT_PRICE_WID) << it->GetId() << setw(FORMAT_PRICE_WID)
-             << it->GetSellerId() << endl;
+        cout << setw(FORMAT_NAME_WID) << all_food[i].GetDscrip()
+             << setw(FORMAT_PRICE_WID) << all_food[i].GetPrice()
+             << setw(FORMAT_PRICE_WID) << all_food[i].GetId()
+             << setw(FORMAT_PRICE_WID) << all_food[i].GetSellerId() << endl;
       }
     }
     if (!flag)
@@ -446,8 +455,8 @@ void Platform ::create_new_act() {
     id = 0;
   }
   if (type == CONSUMER) {
-    for (auto it = all_consumer.begin(); it != all_consumer.end(); it++) {
-      if (username == it->GetName()) {
+    for (int i = 0; i < all_consumer.size(); i++) {
+      if (username == all_consumer[i].GetName()) {
         id = 0;
         break;
       }
@@ -459,8 +468,8 @@ void Platform ::create_new_act() {
     }
   }
   if (type == SELLER) {
-    for (; it != all_seller.end(); it++) {
-      if (username == it->GetName()) {
+    for (int i = 0; i < all_seller.size(); i++) {
+      if (username == all_seller[i].GetName()) {
         id = 0;
         break;
       }
@@ -556,7 +565,7 @@ void Platform::purchase_pdt() {
   cout << "Purchasing product" << endl;
   unsigned int id, amount;
   int type, found = 0;
-  list<product>::iterator it;
+  vector<product>::iterator it;
   print_all_pdt(FOOD);
   print_all_pdt(CLOTH);
   print_all_pdt(BOOK);
@@ -682,23 +691,23 @@ void Platform::del_pdt() {
 
   switch (type) {
   case FOOD:
-    for (auto it = all_food.begin(); it != all_food.end(); it++) {
-      if (it->GetId() == id) {
+    for (int i = 0; i < all_food.size(); i++) {
+      if (all_food[i].GetId() == id) {
         all_food.erase(all_food.begin() + i);
         deleted = 1;
       }
     }
     break;
   case CLOTH:
-    for (auto it = all_cloth.begin(); it != all_cloth.end(); it++) {
-      if (it->GetId() == id) {
+    for (int i = 0; i < all_cloth.size(); i++) {
+      if (all_cloth[i].GetId() == id) {
         all_cloth.erase(all_cloth.begin() + i);
         deleted = 1;
       }
     }
   case BOOK:
-    for (auto it = all_book.begin(); it != all_book.end(); it++) {
-      if (it->GetId() == id) {
+    for (int i = 0; i < all_book.size(); i++) {
+      if (all_book[i].GetId() == id) {
         all_book.erase(all_book.begin() + i);
         deleted = 1;
       }
@@ -716,7 +725,7 @@ void Platform::edt_pdt() {
   int type, pdt_type;
   unsigned int id;
   string descrip;
-  list<product>::iterator cur_pdt;
+  vector<product>::iterator cur_pdt;
   float price = -1;
   int stock = -1;
   print_my_product(FOOD);
@@ -754,11 +763,11 @@ void Platform::edt_pdt() {
   }
 }
 void Platform::search_my_pdt(int type, unsigned int id,
-                             list<product>::iterator &cur_pdt,
+                             vector<product>::iterator &cur_pdt,
                              seller *cur_account) {
-  list<food>::iterator it_f;
-  list<book>::iterator it_b;
-  list<cloth>::iterator it_c;
+  vector<food>::iterator it_f;
+  vector<book>::iterator it_b;
+  vector<cloth>::iterator it_c;
 
   switch (type) {
 
@@ -804,9 +813,9 @@ void Platform::search_my_pdt(int type, unsigned int id,
   }
 }
 void Platform ::print_my_product(int type) {
-  list<food>::iterator it_f;
-  list<book>::iterator it_b;
-  list<cloth>::iterator it_c;
+  vector<food>::iterator it_f;
+  vector<book>::iterator it_b;
+  vector<cloth>::iterator it_c;
   switch (type) {
   case FOOD:
     it_f = all_food.begin();
@@ -926,7 +935,5 @@ void Platform ::print_my_product(int type) {
     break;
   }
 }
-
-// ----------------------PHASE 2-------------------------
 
 #endif

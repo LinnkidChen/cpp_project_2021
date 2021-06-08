@@ -565,37 +565,53 @@ void Platform::purchase_pdt() {
   cout << "please enter number you want to buy" << endl;
   cin >> amount;
   type = id / MAX_PRODUCT;
-  switch (type) {
-  case FOOD:
-    it = find(all_food.begin(), all_food.end(), id);
+
+  if (type == FOOD)
+
+  {
+    auto it = all_food.begin();
+    for (; it != all_food.end(); it++) {
+      if (it->GetId() == id) {
+        found = 1;
+        break;
+      }
+    }
     if (it == all_food.end()) // not found
     {
       cout << "Product not found" << endl;
+    }
+  }
+  if (type == CLOTH)
 
-    } else
-      found = 1;
-
-    break;
-  case CLOTH:
-    it = find(all_cloth.begin(), all_cloth.end(), id);
+  {
+    auto it = all_cloth.begin();
+    for (; it != all_cloth.end(); it++) {
+      if (it->GetId() == id) {
+        found = 1;
+        break;
+      }
+    }
     if (it == all_cloth.end()) // not found
     {
       cout << "Product not found" << endl;
+    }
+  }
+  if (type == BOOK)
 
-    } else
-      found = 1;
-
-    break;
-  case BOOK:
-    it = find(all_book.begin(), all_book.end(), id);
+  {
+    auto it = all_book.begin();
+    for (; it != all_book.end(); it++) {
+      if (it->GetId() == id) {
+        found = 1;
+        break;
+      }
+    }
     if (it == all_book.end()) // not found
     {
       cout << "Product not found" << endl;
-
-    } else
-      found = 1;
-    break;
+    }
   }
+
   if (found) { // found
     if (cur_account->GetBalence() >= it->GetPrice() * amount) {
       if (it->GetStock() >= amount) {
