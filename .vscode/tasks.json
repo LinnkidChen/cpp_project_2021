@@ -8,7 +8,8 @@
                 "-g",
                 "${workspaceFolder}/phase2/source_phase2.cpp",
                 "-o",
-                "${workspaceFolder}/phase2/source_phase2"
+                "${workspaceFolder}/phase2/source_phase2",
+                "-std=c++11"
             ],
             "options": {
                 "cwd": "${fileDirname}"

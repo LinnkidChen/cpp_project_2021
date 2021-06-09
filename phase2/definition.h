@@ -15,6 +15,7 @@ using std::endl;
 using std::list;
 using std::setfill;
 using std::setw;
+
 using std::string;
 using std::stringstream;
 /*-----------------------------------------------------*/
@@ -80,8 +81,11 @@ public:
   }
   virtual unsigned int Getid() { return id; }
 
-  bool operator<(const account &str) const { return (id < str.id); }
-  bool operator==(const unsigned short &fid) { return (id == fid); }
+  //   bool operator<(const account &str) const {
+  //     return (this->Getid() < str.Getid());
+  //   }
+  //   bool operator==(const unsigned short &fid) { return (this->Getid() ==
+  //   fid); }
 
 private:
   string name;
@@ -117,7 +121,7 @@ public:
          unsigned int id_ = 0)
       : account(name_, password_, balance_, id_){};
   int GetUserType() { return SELLER; }
-  using account::operator<;
+  //   using account::operator<;
 };
 
 class consumer : public account {
@@ -126,7 +130,7 @@ public:
            unsigned int id_ = 0)
       : account(name_, password_, balance_, id_){};
   int GetUserType() { return CONSUMER; }
-  using account::operator<;
+  //   using account::operator<;
   cart cart_;
 };
 
@@ -240,10 +244,11 @@ public:
   void purchase_pdt();
   void add_pdt();
   unsigned int genrate_pdt_id(int type);
+  void search_my_pdt(int type, unsigned int id, product *(&cur_pdt),
+                     seller *cur_account);
   void del_pdt();
   void edt_pdt();
-  void search_my_pdt(int type, unsigned int id,
-                     list<product>::iterator &cur_pdt, seller *cur);
+
   void print_my_product(int type);
 
 private:
