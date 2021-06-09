@@ -251,6 +251,9 @@ public:
 
   void print_my_product(int type);
 
+  // CART FEATURE
+  void add_pdt_to_cart();
+
 private:
   list<seller> all_seller;
   list<consumer> all_consumer;

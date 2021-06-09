@@ -387,7 +387,7 @@ void Platform::search_product() {
   string input;
   unsigned int id, flag;
   cin >> input;
-  stringstream degree(input);
+  stringstream degree(input); // transform string to int
   degree >> id;
   flag = 0;
 
@@ -948,5 +948,53 @@ void Platform ::print_my_product(int type) {
       }
     }
   }
+}
+// CART FEATURE
+void Platform::add_pdt_to_cart() {
+  int id;
+  product *pdt_ptr;
+  print_all_pdt(FOOD);
+  print_all_pdt(CLOTH);
+  print_all_pdt(BOOK);
+  pdt_ptr = NULL;
+  cout << "Please enter product id you want to add" << endl;
+  cin >> id;
+
+  int type = id / MAX_PRODUCT;
+  if (type == FOOD) {
+    list<food>::iterator it = all_food.begin();
+    while (it != all_food.end()) {
+      if (it->GetId() == id) {
+        pdt_ptr = &(*it);
+        break;
+      }
+      it++;
+    }
+  }
+  if (type == CLOTH) {
+    list<cloth>::iterator it = all_cloth.begin();
+    while (it != all_cloth.end()) {
+      if (it->GetId() == id) {
+        pdt_ptr = &(*it);
+        break;
+      }
+      it++;
+    }
+  }
+  if (type == BOOK) {
+    list<book>::iterator it = all_book.begin();
+    while (it != all_book.end()) {
+      if (it->GetId() == id) {
+        pdt_ptr = &(*it);
+        break;
+      }
+      it++;
+    }
+  }
+
+  if (pdt_ptr) { // product found
+
+  } else
+    cout << "error,product not found" << endl;
 }
 #endif
