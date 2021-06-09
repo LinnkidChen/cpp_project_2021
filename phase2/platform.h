@@ -949,17 +949,22 @@ void Platform ::print_my_product(int type) {
     }
   }
 }
+//----------------------------------------------------------
 // CART FEATURE
 void Platform::add_pdt_to_cart() {
-  int id;
+  int id, count;
+
   product *pdt_ptr;
+  consumer *cur_act;
   print_all_pdt(FOOD);
   print_all_pdt(CLOTH);
   print_all_pdt(BOOK);
   pdt_ptr = NULL;
+  cur_act = (consumer *)cur_account;
   cout << "Please enter product id you want to add" << endl;
   cin >> id;
-
+  cout << "Please enter num of product" << endl;
+  cin >> count;
   int type = id / MAX_PRODUCT;
   if (type == FOOD) {
     list<food>::iterator it = all_food.begin();
@@ -992,9 +997,15 @@ void Platform::add_pdt_to_cart() {
     }
   }
 
-  if (pdt_ptr) { // product found
-
+  if (pdt_ptr) {                        // product found
+    if (count <= pdt_ptr->GetStock()) { // enough stock
+      pdt_ptr->ChangeStock(-1 * count);
+      cur_act->cart_.add_pdt(pdt_ptr, count);
+      cout << "sucessfully add product to cart " << endl;
+    } else
+      cout << "error,not enough stock" << endl;
   } else
     cout << "error,product not found" << endl;
 }
+
 #endif
