@@ -997,15 +997,40 @@ void Platform::add_pdt_to_cart() {
     }
   }
 
-  if (pdt_ptr) {                        // product found
-    if (count <= pdt_ptr->GetStock()) { // enough stock
-      pdt_ptr->ChangeStock(-1 * count);
-      cur_act->cart_.add_pdt(pdt_ptr, count);
-      cout << "sucessfully add product to cart " << endl;
-    } else
-      cout << "error,not enough stock" << endl;
-  } else
-    cout << "error,product not found" << endl;
-}
+  if (pdt_ptr) { // product found
 
+    if (cur_act->cart_.add_pdt(pdt_ptr, count))
+      cout << "sucessfully add product to cart" << endl;
+  }
+
+  void Platform::remov_pdt_cart() {
+    consumer *cur_act;
+    int seq;
+    cur_act = (consumer *)cur_account;
+    cur_act->cart_.show_cart();
+    cout << "enter the seq num you want to remove" << endl;
+    cin >> seq;
+
+    if (cur_act->cart_.remove_pdt(seq))
+      cout << "remove successfully" << endl;
+  }
+
+  void Platform::change_pdt_cart() {
+    consumer *cur_act;
+    int seq, num;
+    cur_act = (consumer *)cur_account;
+    cout << "please enter seq number you want to change" << endl;
+    cin >> seq;
+    cout << "enter number you want to change" << endl;
+    cin >> num;
+
+    if (cur_act->cart_.change_pdt_num(seq, num)) {
+      cout << "change successfully" << endl;
+    }
+  }
+
+  int cart::add_pdt(product * pdt_ptr, int num) {
+    list<cart_pdt>::iterator it;
+    it = pdt.begin();
+  }
 #endif
