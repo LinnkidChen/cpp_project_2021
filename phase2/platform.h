@@ -1031,6 +1031,9 @@ void Platform::add_pdt_to_cart() {
 
   int cart::add_pdt(product * pdt_ptr, int num) {
     list<cart_pdt>::iterator it;
-    it = pdt.begin();
+    it = pdt_lst.begin();
+    int dup;
+    dup = 0;
+    while (it != pdt_)
   }
 #endif

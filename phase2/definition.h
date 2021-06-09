@@ -106,14 +106,16 @@ class cart_pdt {
 };
 class cart {
 public:
-  void add_pdt(int id, product *pdt_ptr);
-  void remove_pdt(int seq);
+  int add_pdt(product *pdt_ptr, int num);
+  int remove_pdt(int seq);
 
-  void add_pdt_num(int seq, int num);
-  void dec_pdt_num(int seq, int num);
+  int change_pdt_num(int seq, int num);
+
+  void show_cart();
+  void renew_seq();
 
 private:
-  list<cart_pdt> pdt;
+  list<cart_pdt> pdt_lst;
 };
 class seller : public account {
 public:
@@ -253,6 +255,8 @@ public:
 
   // CART FEATURE
   void add_pdt_to_cart();
+  void remov_pdt_cart();
+  void change_pdt_cart();
 
 private:
   list<seller> all_seller;
