@@ -36,6 +36,7 @@ using std::stringstream;
 #define FORMAT_PRICE_WID 12
 #define FORMAT_BAR_FRONT 40
 #define FORMAT_BAR_RARE 25
+#define FORMAT_SEQ_WID 5
 
 /*-----------------------------------------------------*/
 class product;
@@ -121,6 +122,7 @@ public:
 
   void show_cart();
   void renew_seq();
+  bool is_empty();
 
 private:
   list<cart_pdt> pdt_lst;

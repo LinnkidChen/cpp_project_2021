@@ -256,6 +256,11 @@ void Platform::write_back_file() {
     10.add product--seller
     11. delete product -->changd descrip/ change stock/ change price
     12.  edit product--seller
+    13. add product
+    14. remove product
+    15. change product num
+    16.show cart
+    17. generate order
 
 */
 int Platform::Get_option() {
@@ -294,6 +299,22 @@ int Platform::Get_option() {
     cout << i << ". edit product" << endl; // 8
     i++;
   }
+
+  if (account_type == CONSUMER) {
+    cout << i << ". add product to cart" << endl; // 8
+    consumer *act;
+    act = (consumer *)cur_account;
+    if (!(act->cart_.is_empty())) {
+      cout << i << ". remove product" << endl; // 9
+      i++;
+      cout << i << ". change product number" << endl; // 10
+      i++;
+      cout << i << ". show cart" << endl; // 11
+      i++;
+      cout << i << ". genrate_order" << endl; // 12
+      i++;
+    }
+  }
   //   cout << i << ". back to option page" << endl;
   cout << "q.quiting\n";
   cout << "\n"
@@ -303,7 +324,7 @@ int Platform::Get_option() {
   }
   cin >> choice;
   if (choice >= i)
-    return 20; // skip the swithch branch
+    return 50; // skip the swithch branch
   if (choice < 3)
     return choice;
   if (choice < 5 && account_type == -1)
@@ -332,9 +353,14 @@ int Platform::Get_option() {
     8.top up           ---con
     9.buy product          --con
     10.add product--seller
-    11. delete product -->
+    11. delete product -->changd descrip/ change stock/ change price
     12.  edit product--seller
-    changd descrip/ change stock/ change price
+  ----------cart feature--------
+    13. add product cart
+    14. remove product
+    15. change product num
+    16.show cart
+    17. generate order
 
 */
 void Platform ::process_choice(int choice) {
@@ -1016,6 +1042,8 @@ void Platform::remov_pdt_cart() {
 
   if (cur_act->cart_.remove_pdt(seq))
     cout << "remove successfully" << endl;
+  else
+    cout << "fail to remove" << endl;
 }
 
 void Platform::change_pdt_cart() {
@@ -1029,7 +1057,8 @@ void Platform::change_pdt_cart() {
 
   if (cur_act->cart_.change_pdt_num(seq, num)) {
     cout << "change successfully" << endl;
-  }
+  } else
+    cout << "fail to change" << endl;
 }
 
 int cart::add_pdt(product *pdt_ptr, int num) {
@@ -1049,14 +1078,14 @@ int cart::add_pdt(product *pdt_ptr, int num) {
     if (change_pdt_num(it->seq, num))
       return 2;
     else
-      return -1;
+      return 0;
   } else {
     if (pdt_ptr->GetStock() >= num && pdt_lst.size() < CART_SIZE) {
       pdt_ptr->ChangeStock(-1 * num);
       pdt_lst.push_back(cart_pdt(pdt_ptr, num, pdt_lst.size() + 1));
       return 1;
     } else
-      return -1;
+      return 0;
   }
   return 0;
 }
@@ -1068,8 +1097,44 @@ int cart::remove_pdt(int seq) {
       break;
     }
   }
-  if (it->seq == pdt_lst.end()) { // not found;
-    return -1;
+  if (it == pdt_lst.end()) { // not found;
+    return 0;
+  } else {
+    pdt_lst.erase(it);
+    return 1;
   }
+}
+
+void cart::show_cart() {
+  list<cart_pdt>::iterator it;
+  it = pdt_lst.begin();
+  cout << setw(FORMAT_BAR_FRONT) << setfill('-') << "PRINTING CART"
+       << setw(FORMAT_BAR_RARE) << "" << endl
+       << setfill(' ');
+  cout << setw(FORMAT_SEQ_WID) << "Sequence" << setw(FORMAT_NAME_WID)
+       << "Description" << setw(FORMAT_PRICE_WID) << "Price"
+       << setw(FORMAT_PRICE_WID) << " ID" << setw(FORMAT_PRICE_WID)
+       << "Seller id" << setw(FORMAT_SEQ_WID) << "selected" << endl;
+  while (it != pdt_lst.end()) {
+    cout << setw(FORMAT_SEQ_WID) << it->seq << ". " << setw(FORMAT_NAME_WID)
+         << it->pdt_ptr->GetDscrip() << setw(FORMAT_PRICE_WID)
+         << it->pdt_ptr->GetPrice() << setw(FORMAT_PRICE_WID)
+         << it->pdt_ptr->GetId() << setw(FORMAT_PRICE_WID)
+         << it->pdt_ptr->GetSellerId() << setw(FORMAT_PRICE_WID) << it->selected
+         << endl;
+    it++;
+  }
+}
+
+void cart::renew_seq() {
+  int q = 1;
+  list<cart_pdt>::iterator it;
+  it = pdt_lst.begin();
+  while (it != pdt_lst.end()) {
+    it->seq = q;
+    q++;
+    it++;
+  }
+}
 
 #endif

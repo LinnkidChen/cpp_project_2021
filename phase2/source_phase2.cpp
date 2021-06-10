@@ -57,18 +57,18 @@ int main() {
 
   platform.init_load_file();
   platform.test();
-  while (true) {
-    choice = platform.Get_option();
-    if (choice == -1) {
-      cout << "Exiting program." << endl;
-      break;
-    } else if (choice <= CHOISE_COUNT) {
-      platform.process_choice(choice);
-      getchar();
-      getchar();
-    }
-  }
-  platform.write_back_file();
+  //   while (true) {
+  //     choice = platform.Get_option();
+  //     if (choice == -1) {
+  //       cout << "Exiting program." << endl;
+  //       break;
+  //     } else if (choice <= CHOISE_COUNT) {
+  //       platform.process_choice(choice);
+  //       getchar();
+  //       getchar();
+  //     }
+  //   }
+  //   platform.write_back_file();
   //   string input;
   //   while (true) {
   //     cin >> input;
@@ -77,6 +77,9 @@ int main() {
 }
 
 void Platform::test() {
+  account_type = CONSUMER;
+  cur_account = &all_consumer.front();
+  add_pdt_to_cart();
   //   cur_account = &all_consumer[2];
   //   ((consumer *)(cur_account))->cart_.add_pdt(1, (product *)(&all_book[2]));
 }
