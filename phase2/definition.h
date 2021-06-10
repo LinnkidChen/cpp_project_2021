@@ -107,7 +107,7 @@ public:
     seq = seq_num;
     selected = 0;
   }
-  ~cart_pdt();
+  //~cart_pdt();
   product *pdt_ptr;
   int num;
   int seq;
@@ -123,6 +123,9 @@ public:
   void show_cart();
   void renew_seq();
   bool is_empty();
+  int genrate_order();
+  int check_out_order(); // return 1;success return -1 not engouth stock return
+                         // -2 not enough balance;
 
 private:
   list<cart_pdt> pdt_lst;
@@ -267,6 +270,7 @@ public:
   void add_pdt_to_cart();
   void remov_pdt_cart();
   void change_pdt_cart();
+  void check_out_cart();
 
 private:
   list<seller> all_seller;

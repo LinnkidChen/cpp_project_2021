@@ -8,6 +8,6 @@
         "iostream": "cpp",
         "string": "cpp",
         "list": "cpp",
-        
+        "fstream": "cpp"
     }
 }

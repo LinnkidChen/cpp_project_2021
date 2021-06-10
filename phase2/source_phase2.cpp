@@ -32,7 +32,7 @@ ver2
 */
 #include "definition.h"
 #include "platform.h"
-#include <iostream>
+
 /*-------------------------------------------------------*/
 /*
     1. show all product   --all
@@ -57,22 +57,22 @@ int main() {
 
   platform.init_load_file();
   platform.test();
-  //   while (true) {
-  //     choice = platform.Get_option();
-  //     if (choice == -1) {
-  //       cout << "Exiting program." << endl;
-  //       break;
-  //     } else if (choice <= CHOISE_COUNT) {
-  //       platform.process_choice(choice);
-  //       getchar();
-  //       getchar();
-  //     }
-  //   }
-  //   platform.write_back_file();
-  //   string input;
-  //   while (true) {
-  //     cin >> input;
-  //   }
+  while (true) {
+    choice = platform.Get_option();
+    if (choice == -1) {
+      cout << "Exiting program." << endl;
+      break;
+    } else if (choice <= CHOISE_COUNT) {
+      platform.process_choice(choice);
+      getchar();
+      getchar();
+    }
+  }
+  // platform.write_back_file();
+  string input;
+  while (true) {
+    cin >> input;
+  }
   return 0;
 }
 
