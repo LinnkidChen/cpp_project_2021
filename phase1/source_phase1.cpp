@@ -52,6 +52,8 @@ int main() {
       platform.process_choice(choice);
       getchar();
       getchar();
+      getchar();
+      getchar();
     }
   }
   platform.write_back_file();

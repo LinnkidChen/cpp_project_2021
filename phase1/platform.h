@@ -307,6 +307,8 @@ void Platform ::print_all_pdt(int type) {
         cout << "\n"
              << "Please enter your choice number" << endl;
         if (cin.peek() == 'q') {
+          getchar();
+          getchar();
           return -1;
         }
         cin >> choice;
