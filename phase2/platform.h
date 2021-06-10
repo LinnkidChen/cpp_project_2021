@@ -675,27 +675,27 @@ void Platform::add_pdt() {
 }
 
 unsigned int Platform::genrate_pdt_id(int type) {
-  switch (type) {
-    if (type == FOOD) {
-      if (!all_food.empty())
-        return all_food.back().GetId() + 1;
-      else
-        return FOOD * MAX_PRODUCT;
-    }
-    if (type == CLOTH) {
-      if (!all_cloth.empty())
-        return all_cloth.back().GetId() + 1;
-      else
-        return CLOTH * MAX_PRODUCT;
-    }
-    if (type == BOOK) {
-      if (!all_book.empty())
-        return all_book.back().GetId();
-      else
-        return BOOK * MAX_PRODUCT;
-    }
-    return 0;
+
+  if (type == FOOD) {
+    if (!all_food.empty())
+      return all_food.back().GetId() + 1;
+    else
+      return FOOD * MAX_PRODUCT;
   }
+  if (type == CLOTH) {
+    if (!all_cloth.empty())
+      return all_cloth.back().GetId() + 1;
+    else
+      return CLOTH * MAX_PRODUCT;
+  }
+  if (type == BOOK) {
+    if (!all_book.empty())
+      return all_book.back().GetId();
+    else
+      return BOOK * MAX_PRODUCT;
+  }
+
+  return 0;
 }
 void Platform::del_pdt() {
   cout << "delete product" << endl;
@@ -1001,39 +1001,75 @@ void Platform::add_pdt_to_cart() {
 
     if (cur_act->cart_.add_pdt(pdt_ptr, count))
       cout << "sucessfully add product to cart" << endl;
+    else
+      cout << "fail to add product" << endl;
+  } else
+    cout << "product not found" << endl;
+}
+void Platform::remov_pdt_cart() {
+  consumer *cur_act;
+  int seq;
+  cur_act = (consumer *)cur_account;
+  cur_act->cart_.show_cart();
+  cout << "enter the seq num you want to remove" << endl;
+  cin >> seq;
+
+  if (cur_act->cart_.remove_pdt(seq))
+    cout << "remove successfully" << endl;
+}
+
+void Platform::change_pdt_cart() {
+  consumer *cur_act;
+  int seq, num;
+  cur_act = (consumer *)cur_account;
+  cout << "please enter seq number you want to change" << endl;
+  cin >> seq;
+  cout << "enter number you want to change" << endl;
+  cin >> num;
+
+  if (cur_act->cart_.change_pdt_num(seq, num)) {
+    cout << "change successfully" << endl;
+  }
+}
+
+int cart::add_pdt(product *pdt_ptr, int num) {
+  list<cart_pdt>::iterator it;
+  it = pdt_lst.begin();
+  int dup;
+  dup = 0;
+  while (it != pdt_lst.end()) {
+    if (it->pdt_ptr == pdt_ptr) { // found duplicate
+      dup = 1;
+      break;
+    }
+    it++;
   }
 
-  void Platform::remov_pdt_cart() {
-    consumer *cur_act;
-    int seq;
-    cur_act = (consumer *)cur_account;
-    cur_act->cart_.show_cart();
-    cout << "enter the seq num you want to remove" << endl;
-    cin >> seq;
-
-    if (cur_act->cart_.remove_pdt(seq))
-      cout << "remove successfully" << endl;
+  if (dup) {
+    if (change_pdt_num(it->seq, num))
+      return 2;
+    else
+      return -1;
+  } else {
+    if (pdt_ptr->GetStock() >= num && pdt_lst.size() < CART_SIZE) {
+      pdt_ptr->ChangeStock(-1 * num);
+      pdt_lst.push_back(cart_pdt(pdt_ptr, num, pdt_lst.size() + 1));
+      return 1;
+    } else
+      return -1;
   }
-
-  void Platform::change_pdt_cart() {
-    consumer *cur_act;
-    int seq, num;
-    cur_act = (consumer *)cur_account;
-    cout << "please enter seq number you want to change" << endl;
-    cin >> seq;
-    cout << "enter number you want to change" << endl;
-    cin >> num;
-
-    if (cur_act->cart_.change_pdt_num(seq, num)) {
-      cout << "change successfully" << endl;
+  return 0;
+}
+int cart::remove_pdt(int seq) {
+  list<cart_pdt>::iterator it;
+  it = pdt_lst.begin();
+  while (it != pdt_lst.end()) {
+    if (it->seq == seq) {
+      break;
     }
   }
-
-  int cart::add_pdt(product * pdt_ptr, int num) {
-    list<cart_pdt>::iterator it;
-    it = pdt_lst.begin();
-    int dup;
-    dup = 0;
-    while (it != pdt_)
+  if (it->seq == pdt_lst.end()) { // not found;
+    return -1;
   }
+
 #endif

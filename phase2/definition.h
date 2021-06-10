@@ -99,6 +99,14 @@ private:
 */
 
 class cart_pdt {
+public:
+  cart_pdt(product *pdt, int num_, int seq_num) {
+    num = num_;
+    pdt_ptr = pdt;
+    seq = seq_num;
+    selected = 0;
+  }
+  ~cart_pdt();
   product *pdt_ptr;
   int num;
   int seq;
