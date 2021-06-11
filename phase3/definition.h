@@ -6,7 +6,12 @@
 #include <iostream>
 #include <iterator>
 #include <list>
+#include <netdb.h>
+#include <netinet/in.h>
 #include <sstream> //convert num in string to int
+#include <stdlib.h>
+#include <sys/socket.h>
+#include <sys/types.h>
 /*-------------------------------------------------------*/
 
 using std::cin;
@@ -38,6 +43,9 @@ using std::stringstream;
 #define FORMAT_BAR_RARE 25
 #define FORMAT_SEQ_WID 5
 
+#define MAX 80
+#define PORT 8080
+#define SA struct sockaddr
 /*-----------------------------------------------------*/
 class product;
 class consumer;
@@ -283,6 +291,14 @@ private:
   list<book> all_book;
   list<cloth> all_cloth;
   list<food> all_food;
+};
+
+class sockt {
+public:
+  int sockfd, connfd;
+  struct sockaddr_in serv_addr, clint_adr;
+  socklen_t len;
+  void init_skt();
 };
 
 #endif
