@@ -1,39 +1,68 @@
-#include <netdb.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <arpa/inet.h>
+#include <iostream>
 #include <string.h>
+#include <sys/select.h>
 #include <sys/socket.h>
-#define MAX 80
+#include <unistd.h>
 #define PORT 8080
-#define SA struct sockaddr
-
+#define WAIT_USEC 0
+#define WAIT_SEC 5
+#define BUFFER_SIZE 1024
 int main() {
-  int sockfd, connfd;
-  struct sockaddr_in servaddr, cli;
+  int sock = 0, valread, retval;
+  struct sockaddr_in serv_addr;
 
-  // socket create and varification
-  sockfd = socket(AF_INET, SOCK_STREAM, 0);
-  if (sockfd == -1) {
-    printf("socket creation failed...\n");
-    exit(0);
-  } else
-    printf("Socket successfully created..\n");
-  bzero(&servaddr, sizeof(servaddr));
+  char buffer[BUFFER_SIZE] = {0};
+  std::string temp_str;
+  fd_set rfds;
+  struct timeval tv;
 
-  // assign IP, PORT
-  servaddr.sin_family = AF_INET;
-  servaddr.sin_addr.s_addr = inet_addr("127.0.0.1");
-  servaddr.sin_port = htons(PORT);
+  if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+    printf("\n Socket creation error \n");
+    return -1;
+  }
 
-  // connect the client socket to server socket
-  if (connect(sockfd, (SA *)&servaddr, sizeof(servaddr)) != 0) {
-    printf("connection with the server failed...\n");
-    exit(0);
-  } else
-    printf("connected to the server..\n");
+  serv_addr.sin_family = AF_INET;
+  serv_addr.sin_port = htons(PORT);
 
-  // function for chat
+  // Convert IPv4 and IPv6 addresses from text to binary form
+  if (inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr) <= 0) {
+    printf("\nInvalid address/ Address not supported \n");
+    return -1;
+  }
 
-  // close the socket
-  close(sockfd);
+  if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
+    printf("\nConnection Failed \n");
+    return -1;
+  }
+  for (;;) {
+
+    tv.tv_usec = WAIT_USEC;
+    tv.tv_sec = WAIT_SEC;
+
+    FD_ZERO(&rfds);
+    FD_SET(0, &rfds);
+    FD_SET(sock, &rfds);
+
+    retval = select(sock + 1, &rfds, NULL, NULL, &tv);
+
+    if (retval == -1) {
+      perror("retval");
+    } else if (retval) {
+      if (FD_ISSET(0, &rfds)) { // cin is ready
+        std::cin >> temp_str;
+        send(sock, temp_str.c_str(), temp_str.size() + 1, 0);
+        temp_str.clear();
+      }
+      if (FD_ISSET(sock, &rfds)) { // recv is ready
+        memset(buffer, 0, BUFFER_SIZE);
+        read(sock, buffer, BUFFER_SIZE);
+        std::cout << buffer;
+      }
+    } else {
+      std::cout << "No data in 5 secs" << std::endl;
+    }
+  }
+
+  return 0;
 }

@@ -27,7 +27,8 @@ ver2
                                         ->支持全选结账
                                         结账后刷新整个购物车的seq
 
-当前进度/：用list替换vector 仍在进行中
+当前进读：：更换cin
+我只能说渐入佳境
 
 */
 #include "definition.h"
@@ -54,7 +55,7 @@ ver2
 int main() {
   Platform platform;
   int choice;
-
+  platform.skt.init_skt();
   platform.init_load_file();
   platform.test();
   while (true) {

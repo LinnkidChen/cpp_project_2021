@@ -2,6 +2,8 @@
 #define DEFINITION_H 2
 
 #include <cstring>
+#include <errno.h>
+#include <fcntl.h>
 #include <fstream>
 #include <iostream>
 #include <iterator>
@@ -9,7 +11,10 @@
 #include <netdb.h>
 #include <netinet/in.h>
 #include <sstream> //convert num in string to int
+
 #include <stdlib.h>
+#include <string.h>
+#include <sys/select.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 /*-------------------------------------------------------*/
@@ -45,11 +50,22 @@ using std::stringstream;
 
 #define MAX 80
 #define PORT 8080
+#define BUFFER_SIZE 1024
 #define SA struct sockaddr
 /*-----------------------------------------------------*/
 class product;
 class consumer;
-
+class sockt {
+public:
+  int server_fd, new_socket, valread;
+  struct sockaddr_in address;
+  int addrlen;
+  char buffer[BUFFER_SIZE];
+  std::stringstream out_;
+  std::stringstream in_;
+  void init_skt();
+  void send_();
+};
 class account {
 public:
   account(string name_ = NULL, string password_ = NULL, float balance_ = 0,
@@ -129,13 +145,13 @@ public:
 
   int change_pdt_num(int seq, int num);
 
-  void show_cart();
+  void show_cart(sockt &skt);
   void renew_seq();
   bool is_empty();
-  int genrate_order(consumer *cur_act);
-  int check_out_order(
-      consumer *cur_act); // return 1;success return -1 not engouth stock return
-                          // -2 not enough balance;
+  int genrate_order(consumer *cur_act, sockt &skt);
+  int check_out_order(consumer *cur_act,
+                      sockt &skt); // return 1;success return -1 not engouth
+                                   // stock return -2 not enough balance;
 
 private:
   list<cart_pdt> pdt_lst;
@@ -252,6 +268,8 @@ private:
 
 class Platform {
 public:
+  Platform(){};
+  ~Platform(){};
   void test();
   void init_load_file(); // load in user and product
   void login_signin();
@@ -281,6 +299,7 @@ public:
   void remov_pdt_cart();
   void change_pdt_cart();
   void check_out_cart();
+  sockt skt;
 
 private:
   list<seller> all_seller;
@@ -291,14 +310,6 @@ private:
   list<book> all_book;
   list<cloth> all_cloth;
   list<food> all_food;
-};
-
-class sockt {
-public:
-  int sockfd, connfd;
-  struct sockaddr_in serv_addr, clint_adr;
-  socklen_t len;
-  void init_skt();
 };
 
 #endif

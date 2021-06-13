@@ -4,14 +4,15 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+    
         {
             "name": "g++ - Build and debug active file",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/phase2/source_phase2",
+            "program": "${workspaceFolder}/phase3/server",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}/phase2",
+            "cwd": "${workspaceFolder}/phase3",
             "environment": [],
             "externalConsole": true,
 
