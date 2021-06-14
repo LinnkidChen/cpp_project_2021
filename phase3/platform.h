@@ -805,17 +805,21 @@ void Platform::add_pdt() {
     food fod(dscrip, price, stock, id, sellerid);
     fod.SetSellerAccount((seller *)cur_account);
     all_food.push_back(fod);
+    skt.out_ << "Add product successfully" << endl;
   } else if (type == CLOTH) {
     cloth clth(dscrip, price, stock, id, sellerid);
     clth.SetSellerAccount((seller *)cur_account);
     all_cloth.push_back(clth);
+    skt.out_ << "Add product successfully" << endl;
   } else if (type == BOOK) {
     book bok(dscrip, price, stock, id, sellerid);
     bok.SetSellerAccount((seller *)cur_account);
     all_book.push_back(bok);
+    skt.out_ << "Add product successfully" << endl;
+  } else {
+    skt.out_ << "Invalid type" << endl;
   }
 
-  skt.out_ << "Add product successfully" << endl;
   skt.send_();
 }
 

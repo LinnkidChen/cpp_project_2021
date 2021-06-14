@@ -125,9 +125,9 @@ public:
   void renew_seq();
   bool is_empty();
   int genrate_order(consumer *cur_act);
-  int check_out_order(
-      consumer *cur_act); // return 1;success return -1 not engouth stock return
-                          // -2 not enough balance;
+  int check_out_order(consumer *cur_act);
+  void delete_cart(); // return 1;success return -1 not engouth stock return
+                      // -2 not enough balance;
 
 private:
   list<cart_pdt> pdt_lst;
@@ -185,7 +185,7 @@ public:
   virtual int GetStock() { return Stock; };
   virtual seller *GetSellerAccount() { return seller_act; }
   virtual void SetSellerAccount(seller *sact) { seller_act = sact; }
-  virtual int GetProductType() = 0;
+  virtual int GetProductType() { return 0; };
   virtual unsigned int GetId() { return id; };
   virtual unsigned int GetSellerId() { return seller_id; };
 
@@ -273,6 +273,7 @@ public:
   void remov_pdt_cart();
   void change_pdt_cart();
   void check_out_cart();
+  void free_cart();
 
 private:
   list<seller> all_seller;

@@ -315,7 +315,6 @@ int Platform::Get_option() {
        << "Please enter your choice number" << endl;
   if (cin.peek() == 'q') {
     getchar();
-    getchar();
     return -1;
   }
   cin >> choice;
@@ -328,7 +327,7 @@ int Platform::Get_option() {
   choice += 2;
   if (choice < 8 && account_type)
     return choice;
-  if (choice < 9 && account_type == CONSUMER) {
+  if (choice < 10 && account_type == CONSUMER) {
     return choice;
   }
   if (choice < 15 && account_type == CONSUMER) {
@@ -609,7 +608,7 @@ void Platform::purchase_pdt() {
   cout << "Purchasing product" << endl;
   unsigned int id, amount;
   int type, found = 0;
-  list<product>::iterator it;
+  product *cur_pdt = NULL;
   print_all_pdt(FOOD);
   print_all_pdt(CLOTH);
   print_all_pdt(BOOK);
@@ -632,7 +631,8 @@ void Platform::purchase_pdt() {
     if (it == all_food.end()) // not found
     {
       cout << "Product not found" << endl;
-    }
+    } else
+      cur_pdt = &(*it);
   }
   if (type == CLOTH)
 
@@ -648,7 +648,8 @@ void Platform::purchase_pdt() {
     if (it == all_cloth.end()) // not found
     {
       cout << "Product not found" << endl;
-    }
+    } else
+      cur_pdt = &(*it);
   }
   if (type == BOOK)
 
@@ -663,20 +664,20 @@ void Platform::purchase_pdt() {
     if (it == all_book.end()) // not found
     {
       cout << "Product not found" << endl;
-    }
-
-    if (found) { // found
-      if (cur_account->GetBalence() >= it->GetPrice() * amount) {
-        if (it->GetStock() >= amount) {
-          it->ChangeStock(-1 * amount);
-          cur_account->SubBalance(amount * it->GetPrice());
-          it->GetSellerAccount()->AddBalance(it->GetPrice() * amount);
-          cout << "Purchase successfully" << endl;
-        } else
-          cout << "Not enough balance" << endl;
+    } else
+      cur_pdt = &(*it);
+  }
+  if (found) { // found
+    if (cur_account->GetBalence() >= cur_pdt->GetPrice() * amount) {
+      if (cur_pdt->GetStock() >= amount) {
+        cur_pdt->ChangeStock(-1 * amount);
+        cur_account->SubBalance(amount * cur_pdt->GetPrice());
+        cur_pdt->GetSellerAccount()->AddBalance(cur_pdt->GetPrice() * amount);
+        cout << "Purchase successfully" << endl;
       } else
-        cout << "Not enough product in stock" << endl;
-    }
+        cout << "Not enough balance" << endl;
+    } else
+      cout << "Not enough product in stock" << endl;
   }
 }
 void Platform::add_pdt() {
@@ -701,18 +702,20 @@ void Platform::add_pdt() {
     food fod(dscrip, price, stock, id, sellerid);
     fod.SetSellerAccount((seller *)cur_account);
     all_food.push_back(fod);
-  }
-  if (type == CLOTH) {
+    cout << "Add product successfully" << endl;
+  } else if (type == CLOTH) {
     cloth clth(dscrip, price, stock, id, sellerid);
     clth.SetSellerAccount((seller *)cur_account);
     all_cloth.push_back(clth);
-  }
-  if (type == BOOK) {
+    cout << "Add product successfully" << endl;
+  } else if (type == BOOK) {
     book bok(dscrip, price, stock, id, sellerid);
     bok.SetSellerAccount((seller *)cur_account);
     all_book.push_back(bok);
+    cout << "Add product successfully" << endl;
+  } else {
+    cout << "invalid type" << endl;
   }
-  cout << "Add product successfully" << endl;
 }
 
 unsigned int Platform::genrate_pdt_id(int type) {
@@ -790,7 +793,7 @@ void Platform::edt_pdt() {
   int type, pdt_type;
   unsigned int id;
   string descrip;
-  product *cur_pdt;
+  product *cur_pdt = NULL;
   float price = -1;
   int stock = -1;
   print_my_product(FOOD);
@@ -817,16 +820,19 @@ void Platform::edt_pdt() {
   }
 
   search_my_pdt(pdt_type, id, cur_pdt, (seller *)cur_account);
-  if (price > 0) {
-    cur_pdt->ChangePrice(price);
-    cout << "change price done" << endl;
-  } else if (stock > 0) {
-    cur_pdt->ChangeStock(stock);
-    cout << "change stock done" << endl;
-  } else {
-    cur_pdt->ChangeDscrip(descrip);
-    cout << "change description done" << endl;
-  }
+  if (cur_pdt) {
+    if (price > 0) {
+      cur_pdt->ChangePrice(price);
+      cout << "change price done" << endl;
+    } else if (stock > 0) {
+      cur_pdt->ChangeStock(stock);
+      cout << "change stock done" << endl;
+    } else {
+      cur_pdt->ChangeDscrip(descrip);
+      cout << "change description done" << endl;
+    }
+  } else
+    cout << "fail to find product" << endl;
 }
 void Platform::search_my_pdt(int type, unsigned int id, product *(&cur_pdt),
                              seller *cur_account) {
@@ -882,15 +888,17 @@ void Platform ::print_my_product(int type) {
 
   if (type == FOOD) {
     it_f = all_food.begin();
-    while (it_f->GetSellerId() != cur_account->Getid()) {
-      it_f++;
-      if (it_f == all_food.end()) {
-        type = -1;
-        break;
-      } else if (it_f->GetDscrip().empty()) {
+    while (it_f != all_food.end()) {
+      if (it_f->GetDscrip().empty()) {
         type = -1;
         break;
       }
+      if (it_f->GetSellerId() == cur_account->Getid())
+        break;
+      it_f++;
+    }
+    if (it_f == all_food.end()) {
+      type = -1;
     }
     if (type > 0) {
       cout << setw(FORMAT_BAR_FRONT) << setfill('-') << "PRINTING MY FOOD"
@@ -919,15 +927,17 @@ void Platform ::print_my_product(int type) {
 
   if (type == BOOK) {
     it_b = all_book.begin();
-    while (it_b->GetSellerId() != cur_account->Getid()) {
-      it_b++;
-      if (it_b == all_book.end()) {
-        type = -1;
-        break;
-      } else if (it_b->GetDscrip().empty()) {
+    while (it_b != all_book.end()) {
+      if (it_b->GetDscrip().empty()) {
         type = -1;
         break;
       }
+      if (it_b->GetSellerId() == cur_account->Getid())
+        break;
+      it_b++;
+    }
+    if (it_b == all_book.end()) {
+      type = -1;
     }
     if (type > 0) {
       cout << setw(FORMAT_BAR_FRONT) << setfill('-') << "PRINTING MY BOOK"
@@ -955,41 +965,44 @@ void Platform ::print_my_product(int type) {
   }
   if (type == CLOTH) {
     it_c = all_cloth.begin();
-    while (it_c->GetSellerId() != cur_account->Getid()) {
-      it_c++;
-      if (it_c == all_cloth.end()) {
-        type = -1;
-        break;
-      } else if (it_c->GetDscrip().empty()) {
+    while (it_c != all_cloth.end()) {
+      if (it_c->GetDscrip().empty()) {
         type = -1;
         break;
       }
-      if (type > 0) {
-        cout << setw(FORMAT_BAR_FRONT) << setfill('-') << "PRINTING MY CLOTH"
+      if (it_c->GetSellerId() == cur_account->Getid())
+        break;
+      it_c++;
+    }
+    if (it_c == all_cloth.end()) {
+      type = -1;
+    }
+    if (type > 0) {
+      cout << setw(FORMAT_BAR_FRONT) << setfill('-') << "PRINTING MY CLOTH"
+           << setw(FORMAT_BAR_RARE) << "" << endl
+           << setfill(' ');
+
+      cout << setw(FORMAT_NAME_WID) << "Name" << setw(FORMAT_PRICE_WID)
+           << "Price" << setw(FORMAT_PRICE_WID) << "STOCK"
+           << setw(FORMAT_PRICE_WID) << "ID" << setw(FORMAT_PRICE_WID)
+           << "SELLER_ID" << endl;
+      for (; it_c->GetSellerId() == cur_account->Getid();) {
+        cout << setw(FORMAT_NAME_WID) << it_c->GetDscrip()
+             << setw(FORMAT_PRICE_WID) << it_c->GetPrice()
+             << setw(FORMAT_PRICE_WID) << it_c->GetStock()
+             << setw(FORMAT_PRICE_WID) << it_c->GetId()
+             << setw(FORMAT_PRICE_WID) << it_c->GetSellerId() << endl;
+        cout << setw(FORMAT_BAR_FRONT) << setfill('-') << "END OF PRINT"
              << setw(FORMAT_BAR_RARE) << "" << endl
              << setfill(' ');
-
-        cout << setw(FORMAT_NAME_WID) << "Name" << setw(FORMAT_PRICE_WID)
-             << "Price" << setw(FORMAT_PRICE_WID) << "STOCK"
-             << setw(FORMAT_PRICE_WID) << "ID" << setw(FORMAT_PRICE_WID)
-             << "SELLER_ID" << endl;
-        for (; it_c->GetSellerId() == cur_account->Getid();) {
-          cout << setw(FORMAT_NAME_WID) << it_c->GetDscrip()
-               << setw(FORMAT_PRICE_WID) << it_c->GetPrice()
-               << setw(FORMAT_PRICE_WID) << it_c->GetStock()
-               << setw(FORMAT_PRICE_WID) << it_c->GetId()
-               << setw(FORMAT_PRICE_WID) << it_c->GetSellerId() << endl;
-          cout << setw(FORMAT_BAR_FRONT) << setfill('-') << "END OF PRINT"
-               << setw(FORMAT_BAR_RARE) << "" << endl
-               << setfill(' ');
-          it_c++;
-          if (it_c == all_cloth.end())
-            break;
-        }
+        it_c++;
+        if (it_c == all_cloth.end())
+          break;
       }
     }
   }
 }
+
 //----------------------------------------------------------
 // CART FEATURE
 void Platform::add_pdt_to_cart() {
@@ -1214,17 +1227,16 @@ int cart::check_out_order(consumer *cur_act) {
   list<cart_pdt>::iterator it = pdt_lst.begin();
   while (it != pdt_lst.end()) {
     if (it->selected) {
-      if (it->num <= it->pdt_ptr->GetStock()) {
-        if (it->pdt_ptr->GetPrice() * it->num <= cur_act->GetBalence()) {
-          it->pdt_ptr->ChangeStock(-1 * it->num);
-          cur_act->SubBalance(it->num * it->pdt_ptr->GetPrice());
-          it->pdt_ptr->GetSellerAccount()->AddBalance(it->num *
-                                                      it->pdt_ptr->GetPrice());
-          it = pdt_lst.erase(it);
-        } else
-          return -2;
+
+      if (it->pdt_ptr->GetPrice() * it->num <= cur_act->GetBalence()) {
+        it->pdt_ptr->ChangeStock(-1 * it->num);
+        cur_act->SubBalance(it->num * it->pdt_ptr->GetPrice());
+        it->pdt_ptr->GetSellerAccount()->AddBalance(it->num *
+                                                    it->pdt_ptr->GetPrice());
+        it = pdt_lst.erase(it);
+
       } else
-        return -1;
+        return -2;
     } else
       it++;
   }
@@ -1244,6 +1256,23 @@ void Platform::check_out_cart() {
   if (rtval == -2) {
     cout << "not enough balance" << endl;
     cout << cur_account->GetBalence();
+  }
+}
+void Platform::free_cart() {
+  list<consumer>::iterator it;
+  it = all_consumer.begin();
+
+  while (it != all_consumer.end()) {
+    it->cart_.delete_cart();
+    it++;
+  }
+}
+void cart::delete_cart() {
+  list<cart_pdt>::iterator it;
+  it = pdt_lst.begin();
+  while (it != pdt_lst.end()) {
+    it->pdt_ptr->ChangeStock(it->num);
+    it = pdt_lst.erase(it);
   }
 }
 #endif
