@@ -68,6 +68,7 @@ int main() {
     }
   }
   platform.write_back_file();
+  platform.free_cart();
   close(platform.skt.new_socket);
 
   return 0;

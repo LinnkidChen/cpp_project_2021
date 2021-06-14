@@ -73,7 +73,7 @@ int main() {
         while (retval != -1) {
           puts(buffer);
           memset(buffer, 0, BUFFER_SIZE);
-          retval = read(sock, buffer, BUFFER_SIZE);
+          retval = recv(sock, buffer, BUFFER_SIZE, 0);
         }
         std::puts(buffer);
         continue;
