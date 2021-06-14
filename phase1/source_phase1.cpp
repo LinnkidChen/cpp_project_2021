@@ -50,10 +50,6 @@ int main() {
       break;
     } else if (choice <= CHOISE_COUNT) {
       platform.process_choice(choice);
-      getchar();
-      getchar();
-      getchar();
-      getchar();
     }
   }
   platform.write_back_file();

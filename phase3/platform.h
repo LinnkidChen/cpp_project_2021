@@ -344,11 +344,13 @@ int Platform::Get_option() {
            << "Please enter your choice number" << endl;
   skt.send_();
   skt.recv_();
-  if (skt.in_.peek() == 'q') {
-
+  string input;
+  skt.in_ >> input;
+  if (input[0] == 'q') {
     return -1;
   }
-  skt.in_ >> choice;
+  stringstream degree(input);
+  degree >> choice;
   if (choice >= i)
     return 50; // skip the swithch branch
   if (choice < 3)
@@ -768,9 +770,9 @@ void Platform::purchase_pdt() {
         cur_pdt->GetSellerAccount()->AddBalance(cur_pdt->GetPrice() * amount);
         skt.out_ << "Purchase successfully" << endl;
       } else
-        skt.out_ << "Not enough balance" << endl;
+        skt.out_ << "Not enough product in stock" << endl;
     } else
-      skt.out_ << "Not enough product in stock" << endl;
+      skt.out_ << "Not enough balance" << endl;
   }
   skt.send_();
 }

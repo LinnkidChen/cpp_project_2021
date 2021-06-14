@@ -259,7 +259,7 @@ void Platform::write_back_file() {
 int Platform::Get_option() {
   int i = 1;
   int choice;
-
+  string input;
   cout << i << ". show all product" << endl; // 1
   i++;
   cout << i << ". search product " << endl; // 2
@@ -313,10 +313,12 @@ int Platform::Get_option() {
   cout << "q.quiting\n";
   cout << "\n"
        << "Please enter your choice number" << endl;
-  if (cin.peek() == 'q') {
-    getchar();
+  cin >> input;
+  if (input[0] == 'q') {
     return -1;
   }
+  stringstream degree(input);
+  degree >> choice;
   cin >> choice;
   if (choice >= i)
     return 50; // skip the swithch branch
@@ -675,9 +677,9 @@ void Platform::purchase_pdt() {
         cur_pdt->GetSellerAccount()->AddBalance(cur_pdt->GetPrice() * amount);
         cout << "Purchase successfully" << endl;
       } else
-        cout << "Not enough balance" << endl;
+        cout << "Not enough product in stock" << endl;
     } else
-      cout << "Not enough product in stock" << endl;
+      cout << "Not enough balance" << endl;
   }
 }
 void Platform::add_pdt() {

@@ -1,13 +1,15 @@
 #ifndef DEFINITION_H
 #define DEFINITION_H 2
 
+#include <algorithm>
 #include <cstring>
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <iterator>
 #include <sstream> //convert num in string to int
+#include <sstream>
 #include <vector>
-
 /*-------------------------------------------------------*/
 
 using std::cin;
@@ -68,7 +70,7 @@ public:
     return true;
   };
   virtual string GetPswd() { return this->password; }
-  virtual int GetUserType() = 0;
+  virtual int GetUserType() { return 0; };
 
   virtual bool checkPassword(string input) { return input == this->password; }
   virtual bool changePassword(string origin, string new_) {
@@ -223,8 +225,8 @@ public:
   unsigned int genrate_pdt_id(int type);
   void del_pdt();
   void edt_pdt();
-  void search_my_pdt(int type, unsigned int id,
-                     vector<product>::iterator &cur_pdt, seller *cur);
+  void search_my_pdt(int type, unsigned int id, product *(&cur_pdt),
+                     seller *cur_account);
   void print_my_product(int type);
 
 private:
