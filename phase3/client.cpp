@@ -1,13 +1,15 @@
 #include <arpa/inet.h>
+#include <fcntl.h>
 #include <iostream>
 #include <string.h>
 #include <sys/select.h>
 #include <sys/socket.h>
 #include <unistd.h>
+
 #define PORT 8080
-#define WAIT_USEC 0
-#define WAIT_SEC 5
-#define BUFFER_SIZE 1024
+#define WAIT_USEC 5
+#define WAIT_SEC 0
+#define BUFFER_SIZE 10000
 int main() {
   int sock = 0, valread, retval;
   struct sockaddr_in serv_addr;
@@ -32,8 +34,23 @@ int main() {
   }
 
   if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
-    printf("\nConnection Failed \n");
+    perror("connect");
     return -1;
+  }
+  int status = fcntl(sock, F_SETFL, fcntl(sock, F_GETFL, 0) | O_NONBLOCK);
+
+  if (status == -1) {
+    perror("calling fcntl");
+  }
+  int opt = 65535;
+  if (setsockopt(sock, SOL_SOCKET, SO_RCVBUF, &opt, sizeof(opt))) {
+    perror("setsockopt");
+    exit(EXIT_FAILURE);
+  }
+  opt = 65535;
+  if (setsockopt(sock, SOL_SOCKET, SO_SNDBUF, &opt, sizeof(opt))) {
+    perror("setsockopt");
+    exit(EXIT_FAILURE);
   }
   for (;;) {
 
@@ -49,18 +66,27 @@ int main() {
     if (retval == -1) {
       perror("retval");
     } else if (retval) {
+
+      if (FD_ISSET(sock, &rfds)) { // recv is ready
+        memset(buffer, 0, BUFFER_SIZE);
+        retval = read(sock, buffer, BUFFER_SIZE);
+        while (retval != -1) {
+          puts(buffer);
+          memset(buffer, 0, BUFFER_SIZE);
+          retval = read(sock, buffer, BUFFER_SIZE);
+        }
+        std::puts(buffer);
+        continue;
+        // std::cout << buffer;
+      }
       if (FD_ISSET(0, &rfds)) { // cin is ready
         std::cin >> temp_str;
         send(sock, temp_str.c_str(), temp_str.size() + 1, 0);
         temp_str.clear();
-      }
-      if (FD_ISSET(sock, &rfds)) { // recv is ready
-        memset(buffer, 0, BUFFER_SIZE);
-        read(sock, buffer, BUFFER_SIZE);
-        std::cout << buffer;
+        continue;
       }
     } else {
-      std::cout << "No data in 5 secs" << std::endl;
+      // std::cout << "No data in 5 secs" << std::endl;
     }
   }
 

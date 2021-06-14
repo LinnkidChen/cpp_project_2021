@@ -13,7 +13,7 @@ void Platform::init_load_file() {
 
   fin.open("account.txt");
   if (!fin.is_open()) {
-    skt.out_ << "FAIL TO OPEN account.txt" << std::endl;
+    skt.out_ << "FAIL TO OPEN account.txt" << endl;
     skt.send_();
   }
 
@@ -44,7 +44,7 @@ void Platform::init_load_file() {
       product format in file: type description price stock id seller_id
   */
   if (!fin.is_open()) {
-    skt.out_ << "FAIL TO OPEN account.txt" << std::endl;
+    skt.out_ << "FAIL TO OPEN account.txt" << endl;
     skt.send_();
   } else {
     while (!fin.eof()) {
@@ -101,13 +101,13 @@ void Platform ::print_all_act(int type) {
 
     skt.out_ << setw(FORMAT_NAME_WID) << "Name" << setw(FORMAT_PRICE_WID)
              << "BALANCE" << setw(FORMAT_PRICE_WID) << "ID" << endl;
-    skt.send_();
+    // skt.send_();
     list<seller>::iterator it = all_seller.begin();
     for (; it != all_seller.end(); it++) {
       skt.out_ << setw(FORMAT_NAME_WID) << it->GetName()
                << setw(FORMAT_PRICE_WID) << it->GetBalence()
                << setw(FORMAT_PRICE_WID) << it->Getid() << endl;
-      skt.send_();
+      //   skt.send_();
     }
     skt.out_ << setw(FORMAT_BAR_FRONT) << setfill('-') << "END OF PRINTING"
              << setw(FORMAT_BAR_RARE) << "" << endl
@@ -122,13 +122,13 @@ void Platform ::print_all_act(int type) {
 
     skt.out_ << setw(FORMAT_NAME_WID) << "Name" << setw(FORMAT_PRICE_WID)
              << "BALANCE" << setw(FORMAT_PRICE_WID) << "ID" << endl;
-    skt.send_();
+    // skt.send_();
     for (list<consumer>::iterator it = all_consumer.begin();
          it != all_consumer.end(); it++) {
       skt.out_ << setw(FORMAT_NAME_WID) << it->GetName()
                << setw(FORMAT_PRICE_WID) << it->GetBalence()
                << setw(FORMAT_PRICE_WID) << it->Getid() << endl;
-      skt.send_();
+      //   skt.send_();
     }
     skt.out_ << setw(FORMAT_BAR_FRONT) << setfill('-') << "END OF PRINTING"
              << setw(FORMAT_BAR_RARE) << "" << endl
@@ -148,7 +148,7 @@ void Platform ::print_all_pdt(int type) {
              << "Price" << setw(FORMAT_PRICE_WID) << "Stock"
              << setw(FORMAT_PRICE_WID) << "ID" << setw(FORMAT_PRICE_WID)
              << "SELLER_ID" << endl;
-    skt.send_();
+    // skt.send_();
     for (list<book>::iterator it = all_book.begin(); it != all_book.end();
          it++) {
       skt.out_ << setw(FORMAT_NAME_WID) << it->GetDscrip()
@@ -156,7 +156,7 @@ void Platform ::print_all_pdt(int type) {
                << setw(FORMAT_PRICE_WID) << it->GetStock()
                << setw(FORMAT_PRICE_WID) << it->GetId()
                << setw(FORMAT_PRICE_WID) << it->GetSellerId() << endl;
-      skt.send_();
+      //   skt.send_();
     }
     skt.out_ << setw(FORMAT_BAR_FRONT) << setfill('-') << "END OF PRINTING"
              << setw(FORMAT_BAR_RARE) << "" << endl
@@ -172,7 +172,7 @@ void Platform ::print_all_pdt(int type) {
              << "Price" << setw(FORMAT_PRICE_WID) << "Stock"
              << setw(FORMAT_PRICE_WID) << "ID" << setw(FORMAT_PRICE_WID)
              << "SELLER_ID" << endl;
-    skt.send_();
+    // skt.send_();
     for (list<cloth>::iterator it = all_cloth.begin(); it != all_cloth.end();
          it++) {
       skt.out_ << setw(FORMAT_NAME_WID) << it->GetDscrip()
@@ -180,7 +180,7 @@ void Platform ::print_all_pdt(int type) {
                << setw(FORMAT_PRICE_WID) << it->GetStock()
                << setw(FORMAT_PRICE_WID) << it->GetId()
                << setw(FORMAT_PRICE_WID) << it->GetSellerId() << endl;
-      skt.send_();
+      //   skt.send_();
     }
     skt.out_ << setw(FORMAT_BAR_FRONT) << setfill('-') << "END OF PRINTING"
              << setw(FORMAT_BAR_RARE) << "" << endl
@@ -196,7 +196,7 @@ void Platform ::print_all_pdt(int type) {
              << "Price" << setw(FORMAT_PRICE_WID) << "Stock"
              << setw(FORMAT_PRICE_WID) << "ID" << setw(FORMAT_PRICE_WID)
              << "SELLER_ID" << endl;
-    skt.send_();
+    // skt.send_();
     for (list<food>::iterator it = all_food.begin(); it != all_food.end();
          it++) {
       skt.out_ << setw(FORMAT_NAME_WID) << it->GetDscrip()
@@ -204,7 +204,7 @@ void Platform ::print_all_pdt(int type) {
                << setw(FORMAT_PRICE_WID) << it->GetStock()
                << setw(FORMAT_PRICE_WID) << it->GetId()
                << setw(FORMAT_PRICE_WID) << it->GetSellerId() << endl;
-      skt.send_();
+      //   skt.send_();
     }
     skt.out_ << setw(FORMAT_BAR_FRONT) << setfill('-') << "END OF PRINTING"
              << setw(FORMAT_BAR_RARE) << "" << endl
@@ -343,12 +343,13 @@ int Platform::Get_option() {
   skt.out_ << "\n"
            << "Please enter your choice number" << endl;
   skt.send_();
-  if (cin.peek() == 'q') {
+  skt.recv_();
+  if (skt.in_.peek() == 'q') {
     getchar();
     getchar();
     return -1;
   }
-  cin >> choice;
+  skt.in_ >> choice;
   if (choice >= i)
     return 50; // skip the swithch branch
   if (choice < 3)
@@ -460,7 +461,8 @@ void Platform::search_product() {
   skt.send_();
   string input;
   unsigned int id, flag;
-  cin >> input;
+  skt.recv_();
+  skt.in_ >> input;
   stringstream degree(input); // transform string to int
   degree >> id;
   flag = 0;
@@ -481,9 +483,9 @@ void Platform::search_product() {
                  << setw(FORMAT_PRICE_WID) << it->GetPrice()
                  << setw(FORMAT_PRICE_WID) << it->GetId()
                  << setw(FORMAT_PRICE_WID) << it->GetSellerId() << endl;
-        skt.send_();
       }
     }
+    skt.send_();
     for (list<cloth>::iterator it = all_cloth.begin(); it != all_cloth.end();
          it++) {
       if (it->GetDscrip().find(input) != string::npos ||
@@ -493,9 +495,9 @@ void Platform::search_product() {
                  << setw(FORMAT_PRICE_WID) << it->GetPrice()
                  << setw(FORMAT_PRICE_WID) << it->GetId()
                  << setw(FORMAT_PRICE_WID) << it->GetSellerId() << endl;
-        skt.send_();
       }
     }
+    skt.send_();
     for (list<food>::iterator it = all_food.begin(); it != all_food.end();
          it++) {
 
@@ -506,9 +508,9 @@ void Platform::search_product() {
                  << setw(FORMAT_PRICE_WID) << it->GetPrice()
                  << setw(FORMAT_PRICE_WID) << it->GetId()
                  << setw(FORMAT_PRICE_WID) << it->GetSellerId() << endl;
-        skt.send_();
       }
     }
+    skt.send_();
     if (!flag)
       skt.out_ << "Cant find target product " << endl;
     skt.send_();
@@ -523,13 +525,16 @@ void Platform ::create_new_act() {
   int type;
   skt.out_ << "Type.1 for seller,2 for consumer" << endl;
   skt.send_();
-  cin >> type;
+  skt.recv_();
+  skt.in_ >> type;
   skt.out_ << "username" << endl;
   skt.send_();
-  cin >> username;
+  skt.recv_();
+  skt.in_ >> username;
   skt.out_ << "password" << endl;
   skt.send_();
-  cin >> password;
+  skt.recv_();
+  skt.in_ >> password;
 
   id = genrate_account_id(type);
   if (type == CONSUMER) {
@@ -544,11 +549,11 @@ void Platform ::create_new_act() {
       consumer csmr(username, password, 0, id);
       all_consumer.push_back(csmr);
       skt.out_ << "Create successfully!" << endl;
-      skt.send_();
+      //   skt.send_();
     } else {
       skt.out_ << "Username alredy in use." << endl;
-      skt.send_();
     }
+    skt.send_();
   }
   if (type == SELLER) {
     for (list<seller>::iterator it = all_seller.begin(); it != all_seller.end();
@@ -562,11 +567,11 @@ void Platform ::create_new_act() {
       seller slr(username, password, 0, id);
       all_seller.push_back(slr);
       skt.out_ << "Create successfully!" << endl;
-      skt.send_();
+      //   skt.send_();
     } else {
       skt.out_ << "Username alredy in use." << endl;
-      skt.send_();
     }
+    skt.send_();
   }
 }
 unsigned int Platform::genrate_account_id(int type) {
@@ -587,13 +592,16 @@ void Platform::login() {
   int type, loc;
   skt.out_ << "account type: 1 for seller,2 for consumer" << endl;
   skt.send_();
-  cin >> type;
+  skt.recv_();
+  skt.in_ >> type;
   skt.out_ << "username" << endl;
   skt.send_();
-  cin >> username;
+  skt.recv_();
+  skt.in_ >> username;
   skt.out_ << "password" << endl;
   skt.send_();
-  cin >> password;
+  skt.recv_();
+  skt.in_ >> password;
 
   if (type == SELLER) {
     list<seller>::iterator it = all_seller.begin();
@@ -607,19 +615,18 @@ void Platform::login() {
         cur_account = &(*it);
         account_type = SELLER;
         skt.out_ << "Log in successfully" << endl;
-        skt.send_();
+        // skt.send_();
       } else // password incorrect
       {
         skt.out_ << "Incorrect password.Please try again." << endl;
-        skt.send_();
+        // skt.send_();
       }
     } else {
       // account not found
       skt.out_ << "Account not found.please check your input" << endl;
-      skt.send_();
     }
-  }
-  if (type == CONSUMER) {
+    skt.send_();
+  } else if (type == CONSUMER) {
     list<consumer>::iterator it = all_consumer.begin();
     for (; it != all_consumer.end(); it++) {
       if (it->GetName() == username)
@@ -643,7 +650,9 @@ void Platform::login() {
         skt.send_();
       }
     }
-  }
+  } else
+    skt.out_ << "error account type" << endl;
+  skt.send_();
 }
 
 void Platform::change_password() {
@@ -652,10 +661,12 @@ void Platform::change_password() {
   string old_pswd, new_pswd;
   skt.out_ << "old passowrd" << endl;
   skt.send_();
-  cin >> old_pswd;
+  skt.recv_();
+  skt.in_ >> old_pswd;
   skt.out_ << "new password" << endl;
   skt.send_();
-  cin >> new_pswd;
+  skt.recv_();
+  skt.in_ >> new_pswd;
   if (cur_account->changePassword(old_pswd, new_pswd)) // oldpassowrd is corrct
   {
     skt.out_ << "Change Successfully" << endl;
@@ -671,7 +682,8 @@ void Platform::top_up() {
   float add;
   skt.out_ << "amount you want to add:" << endl;
   skt.send_();
-  cin >> add;
+  skt.recv_();
+  skt.in_ >> add;
   cur_account->AddBalance(add);
   skt.out_ << "add successfully" << endl;
   skt.send_();
@@ -688,10 +700,12 @@ void Platform::purchase_pdt() {
   print_all_pdt(BOOK);
   skt.out_ << "please enter the product id you want " << endl;
   skt.send_();
-  cin >> id;
+  skt.recv_();
+  skt.in_ >> id;
   skt.out_ << "please enter number you want to buy" << endl;
   skt.send_();
-  cin >> amount;
+  skt.recv_();
+  skt.in_ >> amount;
   type = id / MAX_PRODUCT;
 
   if (type == FOOD)
@@ -767,16 +781,20 @@ void Platform::add_pdt() {
   unsigned int id, sellerid;
   skt.out_ << "type,11 for food,12 for cloth,13 for book" << endl;
   skt.send_();
-  cin >> type;
+  skt.recv_();
+  skt.in_ >> type;
   skt.out_ << "description" << endl;
   skt.send_();
-  cin >> dscrip;
+  skt.recv_();
+  skt.in_ >> dscrip;
   skt.out_ << "stock" << endl;
   skt.send_();
-  cin >> stock;
+  skt.recv_();
+  skt.in_ >> stock;
   skt.out_ << "price" << endl;
   skt.send_();
-  cin >> price;
+  skt.recv_();
+  skt.in_ >> price;
 
   id = genrate_pdt_id(type);
   sellerid = cur_account->Getid();
@@ -835,7 +853,8 @@ void Platform::del_pdt() {
   deleted = 0;
   skt.out_ << "enter id" << endl;
   skt.send_();
-  cin >> id;
+  skt.recv_();
+  skt.in_ >> id;
   type = id / MAX_PRODUCT;
 
   if (type == FOOD) {
@@ -888,26 +907,31 @@ void Platform::edt_pdt() {
   print_my_product(CLOTH);
   skt.out_ << "enter type.1 descrip,2 price,3 stock" << endl;
   skt.send_();
-  cin >> type;
+  skt.recv_();
+  skt.in_ >> type;
   skt.out_ << "enter product id" << endl;
   skt.send_();
-  cin >> id;
+  skt.recv_();
+  skt.in_ >> id;
   pdt_type = id / MAX_PRODUCT;
   switch (type) {
   case 1:
     skt.out_ << "new descrip" << endl;
     skt.send_();
-    cin >> descrip;
+    skt.recv_();
+    skt.in_ >> descrip;
     break;
   case 2:
     skt.out_ << "new price" << endl;
     skt.send_();
-    cin >> price;
+    skt.recv_();
+    skt.in_ >> price;
     break;
   case 3:
     skt.out_ << "new stock" << endl;
     skt.send_();
-    cin >> stock;
+    skt.recv_();
+    skt.in_ >> stock;
     break;
   }
 
@@ -997,7 +1021,7 @@ void Platform ::print_my_product(int type) {
                << "Price" << setw(FORMAT_PRICE_WID) << "STOCK"
                << setw(FORMAT_PRICE_WID) << "ID" << setw(FORMAT_PRICE_WID)
                << "SELLER_ID" << endl;
-      skt.send_();
+      //   skt.send_();
       for (; it_f->GetSellerId() == cur_account->Getid();) {
         skt.out_ << setw(FORMAT_NAME_WID) << it_f->GetDscrip()
                  << setw(FORMAT_PRICE_WID) << it_f->GetPrice()
@@ -1007,11 +1031,12 @@ void Platform ::print_my_product(int type) {
         skt.out_ << setw(FORMAT_BAR_FRONT) << setfill('-') << "END OF PRINT"
                  << setw(FORMAT_BAR_RARE) << "" << endl
                  << setfill(' ');
-        skt.send_();
+        //
         it_f++;
         if (it_f == all_food.end())
           break;
       }
+      skt.send_();
     }
   }
 
@@ -1036,7 +1061,7 @@ void Platform ::print_my_product(int type) {
                << "Price" << setw(FORMAT_PRICE_WID) << "STOCK"
                << setw(FORMAT_PRICE_WID) << "ID" << setw(FORMAT_PRICE_WID)
                << "SELLER_ID" << endl;
-      skt.send_();
+      //   skt.send_();
       for (; it_b->GetSellerId() == cur_account->Getid();) {
         skt.out_ << setw(FORMAT_NAME_WID) << it_b->GetDscrip()
                  << setw(FORMAT_PRICE_WID) << it_b->GetPrice()
@@ -1046,11 +1071,12 @@ void Platform ::print_my_product(int type) {
         skt.out_ << setw(FORMAT_BAR_FRONT) << setfill('-') << "END OF PRINT"
                  << setw(FORMAT_BAR_RARE) << "" << endl
                  << setfill(' ');
-        skt.send_();
+
         it_b++;
         if (it_b == all_book.end())
           break;
       }
+      skt.send_();
     }
   }
   if (type == CLOTH) {
@@ -1073,7 +1099,7 @@ void Platform ::print_my_product(int type) {
                  << "Price" << setw(FORMAT_PRICE_WID) << "STOCK"
                  << setw(FORMAT_PRICE_WID) << "ID" << setw(FORMAT_PRICE_WID)
                  << "SELLER_ID" << endl;
-        skt.send_();
+        // skt.send_();
         for (; it_c->GetSellerId() == cur_account->Getid();) {
           skt.out_ << setw(FORMAT_NAME_WID) << it_c->GetDscrip()
                    << setw(FORMAT_PRICE_WID) << it_c->GetPrice()
@@ -1084,10 +1110,11 @@ void Platform ::print_my_product(int type) {
                    << setw(FORMAT_BAR_RARE) << "" << endl
                    << setfill(' ');
           it_c++;
-          skt.send_();
+
           if (it_c == all_cloth.end())
             break;
         }
+        skt.send_();
       }
     }
   }
@@ -1106,10 +1133,12 @@ void Platform::add_pdt_to_cart() {
   cur_act = (consumer *)cur_account;
   skt.out_ << "Please enter product id you want to add" << endl;
   skt.send_();
-  cin >> id;
+  skt.recv_();
+  skt.in_ >> id;
   skt.out_ << "Please enter num of product" << endl;
   skt.send_();
-  cin >> count;
+  skt.recv_();
+  skt.in_ >> count;
   int type = id / MAX_PRODUCT;
   if (type == FOOD) {
     list<food>::iterator it = all_food.begin();
@@ -1159,7 +1188,8 @@ void Platform::remov_pdt_cart() {
   cur_act->cart_.show_cart(skt);
   skt.out_ << "enter the seq num you want to remove" << endl;
   skt.send_();
-  cin >> seq;
+  skt.recv_();
+  skt.in_ >> seq;
 
   if (cur_act->cart_.remove_pdt(seq))
     skt.out_ << "remove successfully" << endl;
@@ -1174,10 +1204,12 @@ void Platform::change_pdt_cart() {
   cur_act = (consumer *)cur_account;
   skt.out_ << "please enter seq number you want to change" << endl;
   skt.send_();
-  cin >> seq;
+  skt.recv_();
+  skt.in_ >> seq;
   skt.out_ << "enter number you want to change" << endl;
   skt.send_();
-  cin >> num;
+  skt.recv_();
+  skt.in_ >> num;
 
   if (cur_act->cart_.change_pdt_num(seq, num)) {
     skt.out_ << "change successfully" << endl;
@@ -1241,7 +1273,7 @@ void cart::show_cart(sockt &skt) {
            << "Description" << setw(FORMAT_PRICE_WID) << "Price"
            << setw(FORMAT_PRICE_WID) << " ID" << setw(FORMAT_PRICE_WID) << "NUM"
            << setw(FORMAT_PRICE_WID) << "selected" << endl;
-  skt.send_();
+  //   skt.send_();
   while (it != pdt_lst.end()) {
     skt.out_ << setw(FORMAT_SEQ_WID) << it->seq << ". " << setw(FORMAT_NAME_WID)
              << it->pdt_ptr->GetDscrip() << setw(FORMAT_PRICE_WID)
@@ -1249,8 +1281,8 @@ void cart::show_cart(sockt &skt) {
              << it->pdt_ptr->GetId() << setw(FORMAT_PRICE_WID) << it->num
              << setw(FORMAT_PRICE_WID) << it->selected << endl;
     it++;
-    skt.send_();
   }
+  skt.send_();
 }
 
 void cart::renew_seq() {
@@ -1291,7 +1323,8 @@ int cart::genrate_order(consumer *cur_act, sockt &skt) {
     skt.out_ << "-1 for quitting, -2 for checking out,-3 for selecting all"
              << endl;
     skt.send_();
-    cin >> input;
+    skt.recv_();
+    skt.in_ >> input;
     if (input == -1) {
       break;
     }
@@ -1378,6 +1411,7 @@ void sockt::init_skt() {
     perror("setsockopt");
     exit(EXIT_FAILURE);
   }
+
   address.sin_family = AF_INET;
   address.sin_addr.s_addr = INADDR_ANY;
   address.sin_port = htons(PORT);
@@ -1396,10 +1430,42 @@ void sockt::init_skt() {
     perror("accept");
     exit(EXIT_FAILURE);
   }
+  opt = 65535;
+  if (setsockopt(new_socket, SOL_SOCKET, SO_RCVBUF, &opt, sizeof(opt))) {
+    perror("setsockopt");
+    exit(EXIT_FAILURE);
+  }
+  opt = 65535;
+  if (setsockopt(new_socket, SOL_SOCKET, SO_SNDBUF, &opt, sizeof(opt))) {
+    perror("setsockopt");
+    exit(EXIT_FAILURE);
+  }
 }
 void sockt::send_() {
-  send(new_socket, out_.str().c_str(), out_.str().size() + 1, 0);
+  int retval;
+  char buff[BUFFER_SIZE];
+  memcpy(buff, out_.str().c_str(), out_.str().size() + 1);
+  retval = send(new_socket, buff, out_.str().size() + 1, 0);
+  if (retval == -1)
+    perror("send");
+  if (retval > 0) {
+    cout << buff;
+  }
   out_.str("");
 }
-
+void sockt::recv_() {
+  char buffer[BUFFER_SIZE];
+  memset(buffer, 0, BUFFER_SIZE);
+  //   in_.str("");
+  int len = -1;
+  std::stringstream ss;
+  len = recv(new_socket, buffer, BUFFER_SIZE, 0);
+  if (len == -1)
+    perror("recv");
+  else if (len) {
+    in_ = std::stringstream();
+    ss << buffer;
+    in_ << ss.rdbuf();
+  }
+}
 #endif

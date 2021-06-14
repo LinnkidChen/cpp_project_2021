@@ -67,11 +67,9 @@ int main() {
       platform.process_choice(choice);
     }
   }
-  // platform.write_back_file();
-  string input;
-  while (true) {
-    cin >> input;
-  }
+  platform.write_back_file();
+  close(platform.skt.new_socket);
+
   return 0;
 }
 

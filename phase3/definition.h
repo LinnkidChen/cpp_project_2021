@@ -17,11 +17,12 @@
 #include <sys/select.h>
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <unistd.h>
 /*-------------------------------------------------------*/
 
 using std::cin;
 using std::cout;
-using std::endl;
+// using std::endl;
 using std::list;
 using std::setfill;
 using std::setw;
@@ -50,8 +51,9 @@ using std::stringstream;
 
 #define MAX 80
 #define PORT 8080
-#define BUFFER_SIZE 1024
+#define BUFFER_SIZE 10000
 #define SA struct sockaddr
+#define endl ""
 /*-----------------------------------------------------*/
 class product;
 class consumer;
@@ -65,6 +67,7 @@ public:
   std::stringstream in_;
   void init_skt();
   void send_();
+  void recv_();
 };
 class account {
 public:
