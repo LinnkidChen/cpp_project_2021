@@ -39,7 +39,10 @@ using std::vector;
 #define FORMAT_BAR_FRONT 40
 #define FORMAT_BAR_RARE 25
 
-/*-----------------------------------------------------*/
+#define BOOK_DISCNT 1
+#define CLOTH_DISCNT 1
+#define FOOD_DISCNT 1
+/*----------------------- ------------------------------*/
 
 class account {
 public:
@@ -160,7 +163,7 @@ public:
   }
   bool operator==(const unsigned short &fid) { return (id == fid); }
 
-private:
+protected:
   string Descrip;
 
   float Price;
@@ -178,6 +181,7 @@ public:
       : product(Descrip_, Price_, Stock_, id_, seller_id_), type(FOOD){};
   int GetProductType() { return type; }
   using product::operator<;
+  float GetPrice() { return Price * FOOD_DISCNT; };
 
 private:
   int type;
@@ -189,6 +193,7 @@ public:
       : product(Descrip_, Price_, Stock_, id_, seller_id_), type(CLOTH){};
   int GetProductType() { return type; }
   using product::operator<;
+  float GetPrice() { return Price * CLOTH_DISCNT; };
 
 private:
   int type;
@@ -200,6 +205,7 @@ public:
       : product(Descrip_, Price_, Stock_, id_, seller_id_), type(BOOK){};
   int GetProductType() { return type; }
   using product::operator<;
+  float GetPrice() { return Price * BOOK_DISCNT; };
 
 private:
   int type;

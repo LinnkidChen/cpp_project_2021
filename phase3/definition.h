@@ -50,6 +50,10 @@ using std::stringstream;
 #define FORMAT_BAR_RARE 25
 #define FORMAT_SEQ_WID 5
 
+#define FOOD_DISCNT 1
+#define CLOTH_DISCNT 1
+#define BOOK_DISCNT 1
+
 #define MAX 80
 #define PORT 8080
 #define BUFFER_SIZE 10000
@@ -227,7 +231,7 @@ public:
   bool operator==(const unsigned short &fid) { return (id == fid); }
   virtual int GetProductType() { return 0; };
 
-private:
+protected:
   string Descrip;
 
   float Price;
@@ -245,6 +249,7 @@ public:
       : product(Descrip_, Price_, Stock_, id_, seller_id_), type(FOOD){};
   int GetProductType() { return type; }
   using product::operator<;
+  float GetPrice() { return Price * FOOD_DISCNT; };
 
 private:
   int type;
@@ -256,6 +261,7 @@ public:
       : product(Descrip_, Price_, Stock_, id_, seller_id_), type(CLOTH){};
   int GetProductType() { return type; }
   using product::operator<;
+  float GetPrice() { return Price * CLOTH_DISCNT; };
 
 private:
   int type;
@@ -266,6 +272,7 @@ public:
        unsigned int id_ = 0, unsigned int seller_id_ = 0)
       : product(Descrip_, Price_, Stock_, id_, seller_id_), type(BOOK){};
   int GetProductType() { return type; }
+  float GetPrice() { return Price * BOOK_DISCNT; };
   using product::operator<;
 
 private:
