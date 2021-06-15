@@ -319,7 +319,7 @@ int Platform::Get_option() {
   }
   stringstream degree(input);
   degree >> choice;
-  cin >> choice;
+
   if (choice >= i)
     return 50; // skip the swithch branch
   if (choice < 3)
