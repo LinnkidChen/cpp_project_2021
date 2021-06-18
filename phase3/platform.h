@@ -218,7 +218,7 @@ void Platform ::print_all_pdt(int type) {
   */
 void Platform::write_back_file() {
   std::ofstream fout;
-  fout.open("account.txt");
+  fout.open("account.txt", std::ofstream::trunc);
 
   //   std::sort(all_seller.begin(), all_seller.end());
   //   std::sort(all_consumer.begin(), all_consumer.end());
@@ -240,7 +240,7 @@ void Platform::write_back_file() {
            << " " << it->GetBalence() << " " << it->Getid() << endl;
   }
   fout.close();
-  fout.open("product.txt");
+  fout.open("product.txt", std::ofstream::trunc);
   if (!fout.is_open()) {
     skt.out_ << "unable to open product.txt";
     skt.send_();

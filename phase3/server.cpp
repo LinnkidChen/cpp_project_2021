@@ -57,7 +57,7 @@ int main() {
   int choice;
   platform.skt.init_skt();
   platform.init_load_file();
-  platform.test();
+  // platform.test();
   while (true) {
     choice = platform.Get_option();
     if (choice == -1) {
@@ -65,10 +65,12 @@ int main() {
       break;
     } else if (choice <= CHOISE_COUNT) {
       platform.process_choice(choice);
+      platform.write_back_file();
     }
   }
-  platform.write_back_file();
+
   platform.free_cart();
+  platform.write_back_file();
   close(platform.skt.new_socket);
 
   return 0;
